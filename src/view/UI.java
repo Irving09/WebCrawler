@@ -19,6 +19,8 @@ import java.awt.Color;
 import javax.swing.border.LineBorder;
 import javax.swing.border.EtchedBorder;
 import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
 public class UI extends JFrame{
@@ -62,6 +64,13 @@ public class UI extends JFrame{
 		midPanel.add(panel_2);
 		
 		JButton btnAddToList = new JButton("Add to list");
+		
+		//************************************************************************************ Add to list button**************//
+		btnAddToList.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
 		btnAddToList.setFont(new Font("Tahoma", Font.BOLD, 12));
 		panel_2.add(btnAddToList);
 		
@@ -94,14 +103,19 @@ public class UI extends JFrame{
 		lblKeywords.setBounds(26, 11, 88, 14);
 		panel.add(lblKeywords);
 		
-		final JList keywordList = new JList();
-		keywordList.setBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(221, 160, 221), new Color(192, 192, 192)));
-		keywordList.setVisibleRowCount(10);
-		keywordList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		keywordList.setBounds(26, 36, 200, 272);
-		panel.add(keywordList);
+		final JList keyword_list = new JList();
+		keyword_list.setBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(221, 160, 221), new Color(192, 192, 192)));
+		keyword_list.setVisibleRowCount(10);
+		keyword_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		keyword_list.setBounds(26, 36, 200, 272);
+		panel.add(keyword_list);
 		
 		JButton removeButton = new JButton("Remove");
+		//******************************************************************************Remove Button *******************//
+		removeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		removeButton.setFont(new Font("Tahoma", Font.BOLD, 12));
 		removeButton.setBounds(259, 35, 89, 23);
 		panel.add(removeButton);
@@ -200,9 +214,9 @@ public class UI extends JFrame{
 		hitperpage_list.setBounds(141, 199, 110, 240);
 		panel_1.add(hitperpage_list);
 		
-		JList list = new JList();
-		list.setBorder(new LineBorder(new Color(153, 50, 204), 2, true));
-		list.setModel(new AbstractListModel() {
+		JList totalhits_display = new JList();
+		totalhits_display.setBorder(new LineBorder(new Color(153, 50, 204), 2, true));
+		totalhits_display.setModel(new AbstractListModel() {
 			String[] values = new String[] {"Total hits"};
 			public int getSize() {
 				return values.length;
@@ -211,9 +225,9 @@ public class UI extends JFrame{
 				return values[index];
 			}
 		});
-		list.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		list.setBounds(256, 200, 110, 240);
-		panel_1.add(list);
+		totalhits_display.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		totalhits_display.setBounds(256, 200, 110, 240);
+		panel_1.add(totalhits_display);
 	}
 	public void init() {
 		this.setPreferredSize(new Dimension(800, 600));
