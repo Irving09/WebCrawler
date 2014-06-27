@@ -1,33 +1,18 @@
 package view;
 
-<<<<<<< HEAD
-import java.util.Map;
-
-import javax.swing.JFrame;
-
-import model.KeyWord;
-
-public class UI extends JFrame {
-	
-=======
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-import javax.swing.JButton;
-import javax.swing.JRadioButton;
-import javax.swing.JLabel;
 import java.awt.GridLayout;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-import javax.swing.JList;
-import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
 
 public class UI extends JFrame{
