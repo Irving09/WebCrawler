@@ -1,3 +1,6 @@
+
+import view.UI;
+
 public class Main {
 
 	/**
@@ -5,10 +8,9 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		System.out.println("Hello World");
-		
-		System.out.println("Webcrawler, webcrawler");
-		System.out.println("Test 123");
+		UI web = new UI();
+		web.init();
+		web.pack();
 	}
 
 }
