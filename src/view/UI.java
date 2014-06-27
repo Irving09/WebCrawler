@@ -2,20 +2,19 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import java.awt.GridLayout;
+import javax.swing.JList;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-import javax.swing.JList;
-import javax.swing.ListSelectionModel;
 import javax.swing.border.BevelBorder;
 import javax.swing.AbstractListModel;
-import javax.swing.JTable;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
 import javax.swing.border.EtchedBorder;
@@ -95,7 +94,7 @@ public class UI extends JFrame{
 		lblKeywords.setBounds(26, 11, 88, 14);
 		panel.add(lblKeywords);
 		
-		JList keywordList = new JList();
+		final JList keywordList = new JList();
 		keywordList.setBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(221, 160, 221), new Color(192, 192, 192)));
 		keywordList.setVisibleRowCount(10);
 		keywordList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
