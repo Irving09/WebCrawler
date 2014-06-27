@@ -1,26 +1,29 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.AbstractListModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
-import javax.swing.AbstractListModel;
-import java.awt.Color;
-import javax.swing.border.LineBorder;
 import javax.swing.border.EtchedBorder;
-import java.awt.Font;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.border.LineBorder;
+
+import model.KeyWord;
 
 @SuppressWarnings("serial")
 public class UI extends JFrame{
@@ -31,6 +34,22 @@ public class UI extends JFrame{
 	private JTextField aveUrl_text;
 	private JTextField aveParseTime_text;
 	private JTextField totalRunning_text;
+	private JList<KeyWord> my_key_JList;
+	/**
+	 * This is the string from user input.
+	 * from keyword_text.getText.
+	 */
+	private String my_words;
+	/**
+	 * Need to use DefaultListModel in order to Add or remove from list, since
+	 * JList doesnt have add or remove method.
+	 * This is the List model for Keyword list which being displayed on the left side panel.
+	 */
+	private DefaultListModel<KeyWord> my_key_left_model;
+	private DefaultListModel<KeyWord> my_key_right_model;
+	private DefaultListModel<Double> my_ave_hit_model;
+	private DefaultListModel<Double> my_total_hit_model;
+	
 	public UI() {
 		super("Webcrawler");
 		
@@ -63,12 +82,23 @@ public class UI extends JFrame{
 		panel_2.setBackground(new Color(244, 164, 96));
 		midPanel.add(panel_2);
 		
+		
 		JButton btnAddToList = new JButton("Add to list");
 		
 		//************************************************************************************ Add to list button**************//
 		btnAddToList.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				 
+				//maximum 10 keywords to be added to the JList.
+				 if (my_key_left_model.size() < 10) {
+					 my_words = keyword_text.getText(); //get the text from user input keyword.
+					 final KeyWord search_key = new KeyWord(my_words);
+					 my_key_left_model.addElement(search_key); //add this into the list to display.
+					 keyword_text.setText("");
+				 }
+				 else
+					 System.out.println("Can't add anymore keyword, maximum is 10 words.");
+				 
 			}
 		});
 		btnAddToList.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -77,7 +107,7 @@ public class UI extends JFrame{
 		JPanel botPanel = new JPanel();
 		botPanel.setBackground(new Color(255, 250, 240));
 		northPanel.add(botPanel);
-		botPanel.setLayout(new GridLayout(1, 2, 0, 3));
+		botPanel.setLayout(new GridLayout(1, 3, 0, 3));
 		
 		JLabel lblUrl = new JLabel("URL:");
 		lblUrl.setFont(new Font("Times New Roman", Font.BOLD, 12));
@@ -88,6 +118,14 @@ public class UI extends JFrame{
 		url_text = new JTextField();
 		botPanel.add(url_text);
 		url_text.setColumns(10);
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setBackground(new Color(255, 250, 240));
+		botPanel.add(panel_3);
+		
+		JButton btnCrawl = new JButton("Crawl");
+		btnCrawl.setFont(new Font("Tahoma", Font.BOLD, 12));
+		panel_3.add(btnCrawl);
 		
 		JPanel centerPanel = new JPanel();
 		getContentPane().add(centerPanel, BorderLayout.CENTER);
@@ -102,18 +140,22 @@ public class UI extends JFrame{
 		JLabel lblKeywords = new JLabel("Keywords:");
 		lblKeywords.setBounds(26, 11, 88, 14);
 		panel.add(lblKeywords);
+		//*************************************************************************************fixing JList ************************//
+		//http://www.seasite.niu.edu/cs580java/JList_Basics.htm
 		
-		final JList keyword_list = new JList();
-		keyword_list.setBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(221, 160, 221), new Color(192, 192, 192)));
-		keyword_list.setVisibleRowCount(10);
-		keyword_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		keyword_list.setBounds(26, 36, 200, 272);
-		panel.add(keyword_list);
+		my_key_left_model = new DefaultListModel<KeyWord>();
+		my_key_JList = new JList<KeyWord>(my_key_left_model);
+		my_key_JList.setBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(221, 160, 221), new Color(192, 192, 192)));
+		my_key_JList.setVisibleRowCount(10);
+		my_key_JList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		my_key_JList.setBounds(26, 36, 200, 272);
+		panel.add(my_key_JList);
 		
 		JButton removeButton = new JButton("Remove");
 		//******************************************************************************Remove Button *******************//
 		removeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				my_key_left_model.removeElement(1);
 			}
 		});
 		removeButton.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -180,51 +222,29 @@ public class UI extends JFrame{
 		panel_1.add(totalRunning_text);
 		totalRunning_text.setColumns(10);
 		
-		JList keyword_display = new JList();
+		my_key_right_model = new DefaultListModel<KeyWord>();
+		JList<KeyWord> keyword_display = new JList<KeyWord>(my_key_left_model);
 		keyword_display.setBorder(new LineBorder(new Color(153, 50, 204), 2, true));
 		keyword_display.setVisibleRowCount(10);
 		keyword_display.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		keyword_display.setModel(new AbstractListModel() {
-			String[] values = new String[] {"Keywords"};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
 		keyword_display.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		keyword_display.setBounds(26, 199, 110, 240);
 		panel_1.add(keyword_display);
 		
-		JList hitperpage_list = new JList();
+		JList<Double> hitperpage_list = new JList<Double>();
 		hitperpage_list.setBorder(new LineBorder(new Color(153, 50, 204), 2, true));
-		hitperpage_list.setModel(new AbstractListModel() {
-			String[] values = new String[] {"Ave hits/page"};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
+		
+		
 		hitperpage_list.setVisibleRowCount(10);
 		hitperpage_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		hitperpage_list.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		hitperpage_list.setBounds(141, 199, 110, 240);
 		panel_1.add(hitperpage_list);
 		
-		JList totalhits_display = new JList();
+		JList<Double> totalhits_display = new JList<Double>();
 		totalhits_display.setBorder(new LineBorder(new Color(153, 50, 204), 2, true));
-		totalhits_display.setModel(new AbstractListModel() {
-			String[] values = new String[] {"Total hits"};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
+		
+		
 		totalhits_display.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		totalhits_display.setBounds(256, 200, 110, 240);
 		panel_1.add(totalhits_display);

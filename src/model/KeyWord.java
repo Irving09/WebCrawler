@@ -24,4 +24,7 @@ public class KeyWord {
 	public double total() {
 		return totalHits;
 	}
+	public String toString(){
+		return keyword;
+	}
 }
