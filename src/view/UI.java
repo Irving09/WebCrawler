@@ -152,5 +152,4 @@ public class UI extends JFrame{
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 	}
->>>>>>> 88aeb16f8a28371c6e55d79c9fb7886a5ec1f372
 }

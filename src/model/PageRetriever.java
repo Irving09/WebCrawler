@@ -15,6 +15,20 @@ import org.jsoup.select.Elements;
 
 public class PageRetriever {
 	public static final int PARSE_LIMIT = 15;
+	private String initURL;
+	private List<KeyWord> searchKeyWords;
+
+	/**
+	 * 
+	 * @param beginURL The initial URL to begin the crawl represented as a String.
+	 * @param wordMap Serves as a mapping of String objects to KeyWord objects (i.e. search key words). 
+	 * */
+	public PageRetriever(String beginURL, List<KeyWord> wordsList) {
+		initURL = beginURL;
+		searchKeyWords = new ArrayList<KeyWord>();
+		for (KeyWord w : wordsList)
+			searchKeyWords.add(w);
+	}
 
 	//http://jsoup.org/cookbook/extracting-data/example-list-links
 	public static void main(final String... args) {
@@ -22,28 +36,29 @@ public class PageRetriever {
 //		String test = "abcdefg";
 //		String test2 = "efg";
 //		System.out.println(test.contains(test2));
+		List<KeyWord> words = new ArrayList<KeyWord>();
+		words.add(new KeyWord("Bugs"));
+		words.add(new KeyWord("Document"));
+
+		PageRetriever test = new PageRetriever("http://jsoup.org/cookbook/extracting-data/example-list-links", words);
 		
-		
+		test.start(words);
 	}
 	
-	/**
-	 * 
-	 * @param beginURL The initial URL to begin the crawl represented as a String.
-	 * @param wordMap Serves as a mapping of String objects to KeyWord objects (i.e. search key words). 
-	 * */
-	public PageRetriever(String beginURL, List<KeyWord> searchKeyWords) {
-		String currURL = beginURL;
+	public void start(List<KeyWord> wordsList) {
+		String currURL = initURL;
 		Queue<String> urlQueue = new PriorityQueue<String>();
 		int parsed = 0;
 		while (parsed <= PARSE_LIMIT) {
 			//keep retrieving links, looping through each keyword
 			//for (every word 'w' in the list searchKeyWords)
-			for (KeyWord w : searchKeyWords) {
+			for (KeyWord w : wordsList) {
 				for (String link : retrieveLinks(currURL, w.keyWord())) {
 					urlQueue.add(link);
 				}
 			}
 			currURL = urlQueue.remove();
+			System.out.println(currURL);
 			parsed++;
 		}
 	}
