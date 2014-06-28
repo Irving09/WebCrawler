@@ -228,7 +228,7 @@ public class UI extends JFrame{
 		keyword_display.setVisibleRowCount(10);
 		keyword_display.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		keyword_display.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		keyword_display.setBounds(26, 237, 110, 240);
+		keyword_display.setBounds(26, 214, 110, 240);
 		panel_1.add(keyword_display);
 		
 		JList<Double> hitperpage_list = new JList<Double>();
@@ -238,7 +238,7 @@ public class UI extends JFrame{
 		hitperpage_list.setVisibleRowCount(10);
 		hitperpage_list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		hitperpage_list.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		hitperpage_list.setBounds(141, 237, 110, 240);
+		hitperpage_list.setBounds(141, 214, 110, 240);
 		panel_1.add(hitperpage_list);
 		
 		JList<Double> totalhits_display = new JList<Double>();
@@ -246,26 +246,26 @@ public class UI extends JFrame{
 		
 		
 		totalhits_display.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		totalhits_display.setBounds(256, 238, 110, 240);
+		totalhits_display.setBounds(256, 215, 110, 240);
 		panel_1.add(totalhits_display);
 		
 		JLabel lblKeywords_1 = new JLabel("Keywords");
 		lblKeywords_1.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblKeywords_1.setBounds(41, 212, 77, 14);
+		lblKeywords_1.setBounds(41, 189, 77, 14);
 		panel_1.add(lblKeywords_1);
 		
 		JLabel lblAveHit = new JLabel("Ave. hit/page");
 		lblAveHit.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblAveHit.setBounds(141, 212, 103, 14);
+		lblAveHit.setBounds(141, 189, 103, 14);
 		panel_1.add(lblAveHit);
 		
 		JLabel lblTotalHits = new JLabel("Total Hits");
 		lblTotalHits.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblTotalHits.setBounds(282, 213, 77, 14);
+		lblTotalHits.setBounds(282, 190, 77, 14);
 		panel_1.add(lblTotalHits);
 	}
 	public void init() {
-		this.setPreferredSize(new Dimension(800, 600));
+		this.setPreferredSize(new Dimension(800, 620));
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 	}
