@@ -2,98 +2,59 @@ package model;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-import org.jsoup.*;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+
+/**
+	- The PageRetriever class retrieves web pages and stores them for later analysis by the PageParser class.
+	- Only URLs specifying HTML or text documents should be retrieved.
+	- Each unique URL should be retrieved only once.
+	- This class will need to utilize to a collection of URLs waiting to be retrieved,
+	- as well as a repository in which to store the documents' contents.
+*/
 
 public class PageRetriever {
+	//http://jsoup.org/cookbook/extracting-data/example-list-links
 	public static final int PARSE_LIMIT = 15;
-	private String initURL;
-	private List<KeyWord> searchKeyWords;
+	private Queue<String> urlQueue;
 
 	/**
 	 * 
 	 * @param beginURL The initial URL to begin the crawl represented as a String.
 	 * @param wordMap Serves as a mapping of String objects to KeyWord objects (i.e. search key words). 
 	 * */
-	public PageRetriever(String beginURL, List<KeyWord> wordsList) {
-		initURL = beginURL;
-		searchKeyWords = new ArrayList<KeyWord>();
-		for (KeyWord w : wordsList)
-			searchKeyWords.add(w);
+	public PageRetriever(String beginURL) {
+		urlQueue = new PriorityQueue<String>();
+		urlQueue.add(beginURL);
 	}
-
-	//http://jsoup.org/cookbook/extracting-data/example-list-links
+	
+	public Queue<Document> retrieveDocuments() {
+		Queue<Document> documents = new PriorityQueue<Document>();
+		String url;
+		while (!urlQueue.isEmpty()) {
+			url = urlQueue.remove();
+			try {
+				documents.add(Jsoup.connect(url).get());
+			} catch (IOException e) {
+				System.out.println("Could not convert the provided url link to a document: " + url);
+			}
+		}
+		return documents;
+	}
+	
+	public Queue<String> getURLQueue() {
+		return urlQueue;
+	}
+	
 	public static void main(final String... args) {
-//		System.out.println(retrieveLinks("http://jsoup.org/cookbook/extracting-data/example-list-links", "Bugs"));
-//		String test = "abcdefg";
-//		String test2 = "efg";
-//		System.out.println(test.contains(test2));
-		List<KeyWord> words = new ArrayList<KeyWord>();
-		words.add(new KeyWord("Bugs"));
-		words.add(new KeyWord("Document"));
+//		List<KeyWord> words = new ArrayList<KeyWord>();
+//		words.add(new KeyWord("Bugs"));
+//		words.add(new KeyWord("Document"));
+//		PageRetriever test = new PageRetriever("http://jsoup.org/cookbook/extracting-data/example-list-links");
 
-		PageRetriever test = new PageRetriever("http://jsoup.org/cookbook/extracting-data/example-list-links", words);
-		
-		test.start(words);
 	}
-	
-	public void start(List<KeyWord> wordsList) {
-		String currURL = initURL;
-		Queue<String> urlQueue = new PriorityQueue<String>();
-		int parsed = 0;
-		while (parsed <= PARSE_LIMIT) {
-			//keep retrieving links, looping through each keyword
-			//for (every word 'w' in the list searchKeyWords)
-			for (KeyWord w : wordsList) {
-				for (String link : retrieveLinks(currURL, w.keyWord())) {
-					urlQueue.add(link);
-				}
-			}
-			currURL = urlQueue.remove();
-			System.out.println(currURL);
-			parsed++;
-		}
-	}
-	
-	public static List<String> retrieveLinks(String the_url, String searchKey) {
-		Document doc;
-		try {
-			//connects to the url specified and converts it to Document full of Strings text
-			doc = Jsoup.connect(the_url).get();
-
-			//stores all href (links) elements into an array of ELements
-			Elements links = doc.select("a[href]");
-			
-			List<String> result = new ArrayList<String>();
-
-			//Note: elements from an html page with attributes of href, (links to other pages)
-			//Iterates all links within the page
-			for (Element e : links) {
-				//e.text() is the hyperlinked text in string
-				if (e.text().toLowerCase().contains(searchKey.toLowerCase())) {
-					//e.attr("abs:href") gives the URL of the link in String
-					result.add(e.attr("abs:href"));
-				}
-			}
-			return result;
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	//For single thread, how do we know which link to prioritize?
-	//Or do we care which links to crawl first?
-	
-	//For single thread,
-	//First get all the links from that page and store any links that matches the keyword
-	
 }
