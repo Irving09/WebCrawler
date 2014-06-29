@@ -27,6 +27,7 @@ import model.KeyWord;
 
 @SuppressWarnings("serial")
 public class UI extends JFrame{
+	
 	private JTextField keyword_text;
 	private JTextField url_text;
 	private JTextField pageRetrieved_text;
@@ -123,9 +124,18 @@ public class UI extends JFrame{
 		panel_3.setBackground(new Color(255, 250, 240));
 		botPanel.add(panel_3);
 		
-		JButton btnCrawl = new JButton("Crawl");
-		btnCrawl.setFont(new Font("Tahoma", Font.BOLD, 12));
-		panel_3.add(btnCrawl);
+		JButton crawlButton = new JButton("Crawl");
+		crawlButton.setFont(new Font("Tahoma", Font.BOLD, 12));
+		panel_3.add(crawlButton);
+		
+		crawlButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		
 		JPanel centerPanel = new JPanel();
 		getContentPane().add(centerPanel, BorderLayout.CENTER);
@@ -268,5 +278,8 @@ public class UI extends JFrame{
 		this.setPreferredSize(new Dimension(800, 620));
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setVisible(true);
+	}
+	public String getURL() {
+		return url_text.getText();
 	}
 }

@@ -1,7 +1,6 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -23,6 +22,11 @@ import org.jsoup.select.Elements;
 
 public class PageParser {
 	private Queue<Document> htmlDocs; 
+	
+	public PageParser() {
+		htmlDocs = new PriorityQueue<Document>();
+	}
+	
 	public PageParser(Queue<Document> documents) {
 		htmlDocs = new PriorityQueue<Document>();
 		while (!documents.isEmpty())
@@ -55,12 +59,15 @@ public class PageParser {
 		return relativeURLs;
 	}
 	
-	public static void main(String[] args) {
-		String initialURL = "http://jsoup.org/cookbook/extracting-data/example-list-links";
-		Queue<Document> test = new PriorityQueue<Document>();
-		PageRetriever retriever = new PageRetriever(initialURL);
+	/**
+	 * Add each document into the Queue of Documents to be parsed.
+	 * @param the_doc document of a page.
+	 */
+	public void addDocument(Queue<Document> the_doc) {
+		Iterator<Document> itr = the_doc.iterator();
 		
-		PageParser parser = new PageParser(retriever.retrieveDocuments());
-		System.out.println(parser.parseAllDocuments());
+		while(itr.hasNext()){
+			htmlDocs.add(itr.next());
+		}
 	}
 }
