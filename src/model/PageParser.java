@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -52,5 +53,14 @@ public class PageParser {
 			relativeURLs.add(e.attr("abs:href"));
 		}
 		return relativeURLs;
+	}
+	
+	public static void main(String[] args) {
+		String initialURL = "http://jsoup.org/cookbook/extracting-data/example-list-links";
+		Queue<Document> test = new PriorityQueue<Document>();
+		PageRetriever retriever = new PageRetriever(initialURL);
+		
+		PageParser parser = new PageParser(retriever.retrieveDocuments());
+		System.out.println(parser.parseAllDocuments());
 	}
 }
