@@ -87,9 +87,8 @@ public class WebCrawler {
 				my_parser.addDocument(docs);
 
 				Queue<String> temp = my_parser.parseAllDocuments(my_words);
-				while (!temp.isEmpty()) {
-					urlsToParse.add(temp.remove());
-				}
+					
+				urlsToParse = my_parser.parseAllDocuments(my_words);
 			}
 			//TODO not complete, this will probably throw an infinite loop
 		} while (!urlsToParse.isEmpty());
