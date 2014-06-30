@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -33,19 +34,21 @@ public class PageParser {
 			htmlDocs.add(documents.remove());
 	}
 	
-	public Queue<String> parseAllDocuments() {
+	public Queue<String> parseAllDocuments(final List<KeyWord> searchKeyWords) {
 		Queue<String> urlsToParse = new PriorityQueue<String>();
 		
 		Queue<String> relativeURLs;
 		while (!htmlDocs.isEmpty()) {
-			relativeURLs = parseDocument(htmlDocs.remove());
-			while (!relativeURLs.isEmpty())
+			//relativeURLs represent ALL links within the document
+			relativeURLs = parseDocument(htmlDocs.remove(), searchKeyWords);
+
+			while (!relativeURLs.isEmpty()) 
 				urlsToParse.add(relativeURLs.remove());
 		}
 		return urlsToParse;
 	}
 	
-	private Queue<String> parseDocument(final Document document) {
+	private Queue<String> parseDocument(final Document document, final List<KeyWord> searchKeyWords) {
 		Queue<String> relativeURLs = new PriorityQueue<String>();
 
 		//Note: elements from an html page with attributes of href, (links to other pages)
@@ -53,10 +56,22 @@ public class PageParser {
 
 		//Iterates all links within the document
 		for (Element e : links) {
+			//only return links if any of their text matches a search keyword
+			for (final KeyWord word : searchKeyWords) {
+				//TODO Have to figure out how to efficiently check keyword matches
+				//to any of the links in every page 'e'
+			}
+			
 			//e.attr("abs:href") gives the URL of the link in String
 			relativeURLs.add(e.attr("abs:href"));
 		}
 		return relativeURLs;
+	}
+	
+	public static void main(String[] args) {
+		String abc = "abc";
+		String helloabc = "helloabc";
+		System.out.println(helloabc.contains(abc));
 	}
 	
 	/**

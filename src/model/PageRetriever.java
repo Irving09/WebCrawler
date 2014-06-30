@@ -2,6 +2,7 @@ package model;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -21,6 +22,10 @@ public class PageRetriever {
 	//http://jsoup.org/cookbook/extracting-data/example-list-links
 	public static final int PARSE_LIMIT = 15;
 	private Queue<String> urlQueue;
+	
+	public PageRetriever() {
+		urlQueue = new PriorityQueue<String>();
+	}
 
 	/**
 	 * 
@@ -46,15 +51,18 @@ public class PageRetriever {
 		return documents;
 	}
 	
+	public void addURL(String url) {
+		urlQueue.add(url);
+	}
+	
+	public void addURLqueue(Queue<String> urlsToParse) {
+		Iterator<String> itr = urlsToParse.iterator();
+		while (itr.hasNext())
+			urlQueue.add(itr.next());
+	}
+	
 	public Queue<String> getURLQueue() {
 		return urlQueue;
 	}
 	
-	public static void main(final String... args) {
-//		List<KeyWord> words = new ArrayList<KeyWord>();
-//		words.add(new KeyWord("Bugs"));
-//		words.add(new KeyWord("Document"));
-//		PageRetriever test = new PageRetriever("http://jsoup.org/cookbook/extracting-data/example-list-links");
-
-	}
 }

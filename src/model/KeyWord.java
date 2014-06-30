@@ -15,7 +15,7 @@ public class KeyWord {
 		avgHits = the_avgHits;
 		totalHits = the_totalHits;
 	}
-	public String keyWord() {
+	public String string() {
 		return keyword;
 	}
 	public double average() {
