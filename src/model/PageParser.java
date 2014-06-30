@@ -22,24 +22,38 @@ import org.jsoup.select.Elements;
 */
 
 public class PageParser {
-	private Queue<Document> htmlDocs; 
 	
+	/**
+	 * A queue that holds html documents
+	 * */
+	private Queue<Document> htmlDocs; 
+
+	/**
+	 * Initializes all private fields
+	 * */
 	public PageParser() {
 		htmlDocs = new PriorityQueue<Document>();
 	}
-	
+
+	/**
+	 * Initializes all private fields and adds all documents into the queue
+	 * */
 	public PageParser(Queue<Document> documents) {
 		htmlDocs = new PriorityQueue<Document>();
 		while (!documents.isEmpty())
 			htmlDocs.add(documents.remove());
 	}
-	
+
+	/**
+	 * A method used to parse all documents for links that matches any of the search keywords.
+	 * Returns a queue of links that matches any of the search keywords. 
+	 * */
 	public Queue<String> parseAllDocuments(final List<KeyWord> searchKeyWords) {
 		Queue<String> urlsToParse = new PriorityQueue<String>();
 		
 		Queue<String> relativeURLs;
 		while (!htmlDocs.isEmpty()) {
-			//relativeURLs represent ALL links within the document
+			//relativeURLs represent ALL links within a single document
 			relativeURLs = parseDocument(htmlDocs.remove(), searchKeyWords);
 
 			while (!relativeURLs.isEmpty()) 
@@ -47,7 +61,12 @@ public class PageParser {
 		}
 		return urlsToParse;
 	}
-	
+
+	/**
+	 * A helper method that parses a single document.
+	 * Note that each document will have its own links.
+	 * Returns a queue of urls. 
+	 * */
 	private Queue<String> parseDocument(final Document document, final List<KeyWord> searchKeyWords) {
 		Queue<String> relativeURLs = new PriorityQueue<String>();
 
@@ -67,7 +86,10 @@ public class PageParser {
 		}
 		return relativeURLs;
 	}
-	
+
+	/**
+	 * Testing strings
+	 * */
 	public static void main(String[] args) {
 		String abc = "abc";
 		String helloabc = "helloabc";

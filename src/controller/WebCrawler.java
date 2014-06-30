@@ -75,7 +75,9 @@ public class WebCrawler {
 		
 		//URL queue storage for relative links (links that matches keywords in current url 'removedUrl')
 		Queue<String> urlsToParse = new PriorityQueue<String>();
-		
+
+		//algorithm below closely follows as shown on google docs
+		//still needs some changes
 		do {
 			while(!my_urls.isEmpty()) {
 				removedUrl = my_urls.remove();
@@ -89,7 +91,7 @@ public class WebCrawler {
 					urlsToParse.add(temp.remove());
 				}
 			}
-			
+			//TODO not complete, this will probably throw an infinite loop
 		} while (!urlsToParse.isEmpty());
 	}
 	

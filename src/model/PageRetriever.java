@@ -21,6 +21,10 @@ import org.jsoup.nodes.Document;
 public class PageRetriever {
 	//http://jsoup.org/cookbook/extracting-data/example-list-links
 	public static final int PARSE_LIMIT = 15;
+
+	/**
+	 * The queue of urls for the webcrawler to crawl
+	 * */
 	private Queue<String> urlQueue;
 	
 	public PageRetriever() {
@@ -36,7 +40,10 @@ public class PageRetriever {
 		urlQueue = new PriorityQueue<String>();
 		urlQueue.add(beginURL);
 	}
-	
+
+	/**
+	 * Retrieves all documents associated to the queue of URLs 'urlQueue'.
+	 * */
 	public Queue<Document> retrieveDocuments() {
 		Queue<Document> documents = new PriorityQueue<Document>();
 		String url;
@@ -50,17 +57,26 @@ public class PageRetriever {
 		}
 		return documents;
 	}
-	
+
+	/**
+	 * Adds a single url to the queue.
+	 * */
 	public void addURL(String url) {
 		urlQueue.add(url);
 	}
-	
+
+	/**
+	 * Adds a queue of urls to the queue
+	 * */
 	public void addURLqueue(Queue<String> urlsToParse) {
 		Iterator<String> itr = urlsToParse.iterator();
 		while (itr.hasNext())
 			urlQueue.add(itr.next());
 	}
-	
+
+	/**
+	 * Accessor to the urlQueue
+	 * */
 	public Queue<String> getURLQueue() {
 		return urlQueue;
 	}
