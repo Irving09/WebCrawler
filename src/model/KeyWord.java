@@ -27,4 +27,15 @@ public class KeyWord {
 	public String toString(){
 		return keyword;
 	}
+	
+	public boolean equals(final Object the_other) {
+		if (this == the_other) {
+			return true;
+		} else if ((the_other != null) &&
+				(the_other.getClass() == getClass())) {
+			return keyword.equals(((KeyWord) the_other).string());
+		} else {
+			return false;
+		}
+	}
 }

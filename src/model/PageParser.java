@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Set;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -48,7 +49,7 @@ public class PageParser {
 	 * A method used to parse all documents for links that matches any of the search keywords.
 	 * Returns a queue of links that matches any of the search keywords. 
 	 * */
-	public Queue<String> parseAllDocuments(final List<KeyWord> searchKeyWords) {
+	public Queue<String> parseAllDocuments(final Set<KeyWord> searchKeyWords) {
 		Queue<String> urlsToParse = new PriorityQueue<String>();
 		
 		Queue<String> relativeURLs;
@@ -67,22 +68,32 @@ public class PageParser {
 	 * Note that each document will have its own links.
 	 * Returns a queue of urls. 
 	 * */
-	private Queue<String> parseDocument(final Document document, final List<KeyWord> searchKeyWords) {
+	private Queue<String> parseDocument(final Document document, final Set<KeyWord> searchKeyWords) {
 		Queue<String> relativeURLs = new PriorityQueue<String>();
 
 		//Note: elements from an html page with attributes of href, (links to other pages)
 		Elements links = document.select("a[href]");
-
-		//Iterates all links within the document
+		
+		Element test = document.body();
+		
+		System.out.println();
+		//Iterates all url links within the document
 		for (Element e : links) {
 			//only return links if any of their text matches a search keyword
 			for (final KeyWord word : searchKeyWords) {
 				//TODO Have to figure out how to efficiently check keyword matches
 				//to any of the links in every page 'e'
+				
+				//if (link matches key word)
+				if (e.text().toLowerCase().contains(word.string())) {
+					//e.attr("abs:href") gives the URL of the link in String
+					relativeURLs.add(e.attr("abs:href"));
+				}
 			}
 			
-			//e.attr("abs:href") gives the URL of the link in String
-			relativeURLs.add(e.attr("abs:href"));
+			//remove next two lines once if statement is implemented
+//			relativeURLs.add(e.attr("abs:href"));
+//			System.out.println(e.text());System.out.println();
 		}
 		return relativeURLs;
 	}
@@ -90,11 +101,11 @@ public class PageParser {
 	/**
 	 * Testing strings
 	 * */
-	public static void main(String[] args) {
-		String abc = "abc";
-		String helloabc = "helloabc";
-		System.out.println(helloabc.contains(abc));
-	}
+//	public static void main(String[] args) {
+//		String abc = "abc";
+//		String helloabc = "helloabc";
+//		System.out.println(helloabc.contains(abc));
+//	}
 	
 	/**
 	 * Add each document into the Queue of Documents to be parsed.

@@ -34,7 +34,6 @@ public class PageRetriever {
 	/**
 	 * 
 	 * @param beginURL The initial URL to begin the crawl represented as a String.
-	 * @param wordMap Serves as a mapping of String objects to KeyWord objects (i.e. search key words). 
 	 * */
 	public PageRetriever(String beginURL) {
 		urlQueue = new PriorityQueue<String>();

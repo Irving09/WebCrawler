@@ -2,10 +2,12 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Set;
 
 import model.KeyWord;
 import model.PageParser;
@@ -28,7 +30,7 @@ public class WebCrawler {
 	/**
 	 * List of keywords to search for every crawl
 	 * */
-	private final List<KeyWord> my_words;
+	private final Set<KeyWord> my_words;
 
 	/**
 	 * An object responsible for retrieving the HTML Documents of each URL found in the crawl
@@ -40,22 +42,18 @@ public class WebCrawler {
 	 * */
 	private PageParser my_parser;
 	
-
 	/**
 	 * Constructor set up. Initializes all fields.
 	 * 
 	 * @param the_url: Initial URL to start the crawl.
 	 * @param the_words : Keyword to search.
 	 */
-	public WebCrawler(final String the_url, final List<KeyWord> the_words) {
+	public WebCrawler(final String the_url, final Set<KeyWord> the_words) {
 		my_urls = new PriorityQueue<String>();
 		my_urls.add(the_url);
 		
-		//shallow copy, copies size and pointer
-		my_words = new ArrayList<KeyWord>(the_words);
-
-		//deep copy, copies actual values on separate memory
-		Collections.copy(my_words, the_words);
+		my_words = new HashSet<KeyWord>();
+		my_words.addAll(the_words);
 
 		my_retriever = new PageRetriever();
 		my_parser = new PageParser();
@@ -75,6 +73,8 @@ public class WebCrawler {
 		
 		//URL queue storage for relative links (links that matches keywords in current url 'removedUrl')
 		Queue<String> urlsToParse = new PriorityQueue<String>();
+		
+		boolean foundNewURL = false;
 
 		//algorithm below closely follows as shown on google docs
 		//still needs some changes
@@ -86,13 +86,28 @@ public class WebCrawler {
 				docs = my_retriever.retrieveDocuments();
 				my_parser.addDocument(docs);
 
-				Queue<String> temp = my_parser.parseAllDocuments(my_words);
-				while (!temp.isEmpty()) {
-					urlsToParse.add(temp.remove());
+				urlsToParse = my_parser.parseAllDocuments(my_words);
+			}
+	
+			for (String url : urlsToParse) {
+				if (!my_urls.contains(url)) {
+					my_urls.add(url);
+					foundNewURL = true;
 				}
 			}
-			//TODO not complete, this will probably throw an infinite loop
-		} while (!urlsToParse.isEmpty());
+			urlsToParse.clear();
+		} while (!foundNewURL);
+		
+	}
+	
+	public static void main(String[] args) {
+		String beginURL = "http://jsoup.org/";
+		Set<KeyWord> searchKeyWords = new HashSet<KeyWord>();
+		searchKeyWords.add(new KeyWord("bugs"));
+		
+		WebCrawler crawler = new WebCrawler(beginURL, searchKeyWords);
+		crawler.start();
+		System.out.println(crawler.my_urls);
 	}
 	
 }
