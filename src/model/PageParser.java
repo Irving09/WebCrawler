@@ -44,7 +44,7 @@ public class PageParser {
 		while (!documents.isEmpty())
 			htmlDocs.add(documents.remove());
 	}
-
+	
 	/**
 	 * A method used to parse all documents for links that matches any of the search keywords.
 	 * Returns a queue of links that matches any of the search keywords. 
@@ -83,9 +83,9 @@ public class PageParser {
 			for (final KeyWord word : searchKeyWords) {
 				//TODO Have to figure out how to efficiently check keyword matches
 				//to any of the links in every page 'e'
-				
+
 				//if (link matches key word)
-				if (e.text().toLowerCase().contains(word.string())) {
+				if (e.text().toLowerCase().contains(word.string().toLowerCase())) {
 					//e.attr("abs:href") gives the URL of the link in String
 					relativeURLs.add(e.attr("abs:href"));
 				}
@@ -98,14 +98,9 @@ public class PageParser {
 		return relativeURLs;
 	}
 
-	/**
-	 * Testing strings
-	 * */
-//	public static void main(String[] args) {
-//		String abc = "abc";
-//		String helloabc = "helloabc";
-//		System.out.println(helloabc.contains(abc));
-//	}
+	public void deleteContents() {
+		htmlDocs.clear();
+	}
 	
 	/**
 	 * Add each document into the Queue of Documents to be parsed.

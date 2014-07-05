@@ -20,7 +20,7 @@ public class WebCrawler {
 	/**
 	 * Max number of algorithm loops to enforce the limit of # of web pages to crawl.
 	 * */
-	private static int PAGES_PARSED_LIMIT = 15;
+	private static int CRAWL_LIMIT = 15;
 
 	/**
 	 * A queue that keeps of all the URLs to crawl.
@@ -31,6 +31,11 @@ public class WebCrawler {
 	 * List of keywords to search for every crawl
 	 * */
 	private final Set<KeyWord> my_words;
+
+	/**
+	 * A set containing all the parsed web sites. 
+	 * */
+	private Set<String> websitesCrawled;
 
 	/**
 	 * An object responsible for retrieving the HTML Documents of each URL found in the crawl
@@ -57,6 +62,9 @@ public class WebCrawler {
 
 		my_retriever = new PageRetriever();
 		my_parser = new PageParser();
+		
+		websitesCrawled = new HashSet<String>();
+		websitesCrawled.add(the_url);
 	}
 	
 
@@ -70,33 +78,32 @@ public class WebCrawler {
 		//Queue of HTML documents that corresponds to each url in the queue 'my_urls'
 		Queue<Document> docs;
 		
+		boolean foundNewURL;
+		int prevSize;
 		
-		//URL queue storage for relative links (links that matches keywords in current url 'removedUrl')
-		Queue<String> urlsToParse = new PriorityQueue<String>();
-		
-		boolean foundNewURL = false;
-
 		//algorithm below closely follows as shown on google docs
 		//still needs some changes
 		do {
-			while(!my_urls.isEmpty()) {
+			foundNewURL = false;
+			while(!my_urls.isEmpty() && (websitesCrawled.size() < CRAWL_LIMIT)) {
 				removedUrl = my_urls.remove();
 				my_retriever.addURL(removedUrl);
 
 				docs = my_retriever.retrieveDocuments();
 				my_parser.addDocument(docs);
 
-				urlsToParse = my_parser.parseAllDocuments(my_words);
-			}
-	
-			for (String url : urlsToParse) {
-				if (!my_urls.contains(url)) {
-					my_urls.add(url);
-					foundNewURL = true;
+				for (String url : my_parser.parseAllDocuments(my_words)) {
+					prevSize = websitesCrawled.size();
+					websitesCrawled.add(url);
+					foundNewURL = (websitesCrawled.size() != prevSize); 
+					if (foundNewURL) {
+						my_urls.add(url);
+					}
 				}
+				my_parser.deleteContents();
+				System.out.println(websitesCrawled.size());
 			}
-			urlsToParse.clear();
-		} while (!foundNewURL);
+		} while (foundNewURL);
 		
 	}
 	
@@ -104,10 +111,12 @@ public class WebCrawler {
 		String beginURL = "http://jsoup.org/";
 		Set<KeyWord> searchKeyWords = new HashSet<KeyWord>();
 		searchKeyWords.add(new KeyWord("bugs"));
+		searchKeyWords.add(new KeyWord("Discussion"));
+		searchKeyWords.add(new KeyWord("Stack Overflow"));
 		
 		WebCrawler crawler = new WebCrawler(beginURL, searchKeyWords);
 		crawler.start();
-		System.out.println(crawler.my_urls);
+		System.out.println(crawler.websitesCrawled);
 	}
 	
 }
