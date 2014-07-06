@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultListModel;
@@ -22,6 +24,8 @@ import javax.swing.UIManager;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
+
+import controller.WebCrawler;
 
 import model.KeyWord;
 
@@ -51,8 +55,13 @@ public class UI extends JFrame{
 	private DefaultListModel<Double> my_ave_hit_model;
 	private DefaultListModel<Double> my_total_hit_model;
 	
+	private WebCrawler webCrawler;
+	private Set<KeyWord> searchKeys;
+	
 	public UI() {
 		super("Webcrawler");
+		webCrawler = new WebCrawler();
+		searchKeys = new HashSet<KeyWord>();
 		
 		JPanel northPanel = new JPanel();
 		northPanel.setBackground(new Color(255, 250, 240));
@@ -128,15 +137,6 @@ public class UI extends JFrame{
 		crawlButton.setFont(new Font("Tahoma", Font.BOLD, 12));
 		panel_3.add(crawlButton);
 		
-		crawlButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		
 		JPanel centerPanel = new JPanel();
 		getContentPane().add(centerPanel, BorderLayout.CENTER);
 		centerPanel.setLayout(new GridLayout(1, 2, 0, 0));
@@ -161,6 +161,21 @@ public class UI extends JFrame{
 		my_key_JList.setBounds(26, 36, 200, 272);
 		panel.add(my_key_JList);
 		
+		crawlButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				webCrawler.setBeginURL(url_text.getText());
+				for (int i = 0; i < my_key_JList.getModel().getSize(); i++)
+					searchKeys.add(my_key_JList.getModel().getElementAt(i));
+				webCrawler.setSearchKeyWords(searchKeys);
+				System.out.println("searchKeys: " + webCrawler.getKeyWords());
+				System.out.println("beginURL: " + webCrawler.getURLs());
+				webCrawler.start();
+				System.out.println(webCrawler.getWebSitesCrawled());
+			}
+		});
+		
 		JButton removeButton = new JButton("Remove");
 		//******************************************************************************Remove Button *******************//
 		removeButton.addActionListener(new ActionListener() {
@@ -171,7 +186,7 @@ public class UI extends JFrame{
 		removeButton.setFont(new Font("Tahoma", Font.BOLD, 12));
 		removeButton.setBounds(259, 35, 89, 23);
 		panel.add(removeButton);
-		
+
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(224, 255, 255));
 		panel_1.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));

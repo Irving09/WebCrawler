@@ -47,6 +47,14 @@ public class WebCrawler {
 	 * */
 	private PageParser my_parser;
 	
+	public WebCrawler() {
+		my_urls = new PriorityQueue<String>();
+		my_words = new HashSet<KeyWord>();
+		my_retriever = new PageRetriever();
+		my_parser = new PageParser();
+		websitesCrawled = new HashSet<String>();
+	}
+	
 	/**
 	 * Constructor set up. Initializes all fields.
 	 * 
@@ -67,7 +75,27 @@ public class WebCrawler {
 		websitesCrawled.add(the_url);
 	}
 	
-
+	public void setBeginURL(final String the_url) {
+		my_urls.add(the_url);
+		websitesCrawled.add(the_url);
+	}
+	
+	public void setSearchKeyWords(final Set<KeyWord> the_words) {
+		my_words.addAll(the_words);
+	}
+	
+	public Queue<String> getURLs() {
+		return my_urls;
+	}
+	
+	public Set<KeyWord> getKeyWords() {
+		return my_words;
+	}
+	
+	public Set<String> getWebSitesCrawled() {
+		return websitesCrawled;
+	}
+	
 	/**
 	 * System start up. Begins the algorithm for Webcrawler.
 	 */
@@ -81,8 +109,6 @@ public class WebCrawler {
 		boolean foundNewURL;
 		int prevSize;
 		
-		//algorithm below closely follows as shown on google docs
-		//still needs some changes
 		do {
 			foundNewURL = false;
 			while(!my_urls.isEmpty() && (websitesCrawled.size() < CRAWL_LIMIT)) {
@@ -101,10 +127,10 @@ public class WebCrawler {
 					}
 				}
 				my_parser.deleteContents();
-				System.out.println(websitesCrawled.size());
+				System.err.println(websitesCrawled.size());
 			}
 		} while (foundNewURL);
-		
+		System.err.println("ended loop");
 	}
 	
 	public static void main(String[] args) {
@@ -115,6 +141,8 @@ public class WebCrawler {
 		searchKeyWords.add(new KeyWord("Stack Overflow"));
 		
 		WebCrawler crawler = new WebCrawler(beginURL, searchKeyWords);
+		System.out.println("searchKeys: " + crawler.getKeyWords());
+		System.out.println("beginURL: " + crawler.getURLs());
 		crawler.start();
 		System.out.println(crawler.websitesCrawled);
 	}
