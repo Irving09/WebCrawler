@@ -20,7 +20,7 @@ public class KeyWord {
 		return totalHits;
 	}
 	public String toString(){
-		return keyword + " : " + totalHits;
+		return keyword;// + " : " + totalHits;
 	}
 	
 	public boolean equals(final Object the_other) {
