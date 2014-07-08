@@ -43,16 +43,25 @@ public class PageAnalyzer {
 	}
 	public void analyzePage(Document webPage, Set<KeyWord> searchKeys) {
 		//TODO parse this page for search keys
-		Element head = webPage.head();
-		Element body = webPage.body();
+//		Element head = webPage.head();
+//		Element body = webPage.body();
 		
-		for (Element e : head.getAllElements()) {
+		for (Element e : webPage.getAllElements()) {
 			for (KeyWord word : searchKeys) {
 				if (e.ownText().toLowerCase().contains(word.string().toLowerCase())) {
 					word.addHit();
 				}
 			}
 		}
+		
+//		//head
+//		for (Element e : webPage.head().getAllElements()) {
+//			for (KeyWord word : searchKeys) {
+//				if (e.ownText().toLowerCase().contains(word.string().toLowerCase())) {
+//					word.addHit();
+//				}
+//			}
+//		}
 		
 		System.out.println("analyzing webpage: " + webPage.location());
 	}

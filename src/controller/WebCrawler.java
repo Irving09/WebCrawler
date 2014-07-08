@@ -170,7 +170,12 @@ public class WebCrawler {
 		}
 		
 		System.err.println("ended loop");
-		System.err.println(my_words);
+		System.out.println();
+		System.out.println("Word\t\t\tTotal Hits");
+		for (KeyWord w : my_words) {
+			System.out.println(w.string() + "\t\t\t" + w.total());
+		}
+//		System.err.println(my_words);
 	}
 
 	public static void main(String[] args) {
