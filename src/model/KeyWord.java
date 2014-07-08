@@ -2,11 +2,11 @@ package model;
 
 public class KeyWord {
 	private String keyword;
-	private double totalHits;
+	private int totalHits;
 	public KeyWord(String the_word) {
 		this(the_word, 0);
 	}
-	public KeyWord(String the_word, double the_totalHits) {
+	public KeyWord(String the_word, int the_totalHits) {
 		keyword = the_word;
 		totalHits = the_totalHits;
 	}
@@ -16,7 +16,7 @@ public class KeyWord {
 	public String string() {
 		return keyword;
 	}
-	public double total() {
+	public int total() {
 		return totalHits;
 	}
 	public String toString(){
@@ -32,5 +32,9 @@ public class KeyWord {
 		} else {
 			return false;
 		}
+	}
+	
+	public final void clearHits() {
+		totalHits = 0;
 	}
 }

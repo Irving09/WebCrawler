@@ -19,9 +19,12 @@ import org.jsoup.nodes.Document;
 */
 
 public class PageRetriever {
-	//http://jsoup.org/cookbook/extracting-data/example-list-links
+	//http://jsoup.org/
 	public static final int PARSE_LIMIT = 15;
 
+	/*
+	 * URL queue not used
+	 * */
 	/**
 	 * The queue of urls for the webcrawler to crawl
 	 * */
@@ -39,11 +42,31 @@ public class PageRetriever {
 		urlQueue = new PriorityQueue<String>();
 		urlQueue.add(beginURL);
 	}
+	
+	/**
+	 * Retrieves a single URL and returns a single html document
+	 * 
+	 * @param url THe page's url
+	 * @return The html document form of the website's url 
+	 * */
+	public Document retrieveDocument(String url) {
+		try {
+			return Jsoup.connect(url).get();
+		} catch(IOException e) {
+			System.out.println("Could not convert the provided url link to a document: " + url);
+		}
+		return null;
+	}
+	
 
+	/*
+	 * METHOD NOT USED
+	 * */
 	/**
 	 * Retrieves all documents associated to the queue of URLs 'urlQueue'.
 	 * */
 	public Queue<Document> retrieveDocuments() {
+		System.err.println("urlQueue size: " + urlQueue.size());
 		Queue<Document> documents = new PriorityQueue<Document>();
 		String url;
 		while (!urlQueue.isEmpty()) {
@@ -62,6 +85,10 @@ public class PageRetriever {
 	 * */
 	public void addURL(String url) {
 		urlQueue.add(url);
+	}
+	
+	public void deleteContents() {
+		urlQueue.clear();
 	}
 
 	/**

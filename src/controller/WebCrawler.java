@@ -1,10 +1,6 @@
 package controller;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
@@ -107,16 +103,16 @@ public class WebCrawler {
 	 */
 	public void start(){
 		System.err.println(my_words);
+//		clearContents();
 		
 		//The removed url from the priority queue 'my_urls'.
 		String removedUrl;
 
-		//Queue of HTML documents that corresponds to each url in the queue 'my_urls'
-		Queue<Document> docs;
+		//HTML document that corresponds to the removedUrl
+		Document page;
 		
 		Queue<String> relativeURLs;
 		Queue<String> urlsToParse = new PriorityQueue<String>();
-		Document page;
 		
 		int prevSize;
 		
@@ -126,40 +122,31 @@ public class WebCrawler {
 			//remove the url that is at the top of the queue
 			removedUrl = my_urls.remove();
 
-			//add this url to the page retriever
-			my_retriever.addURL(removedUrl);
+			//convert the url to a document (i.e. page)
+			page = my_retriever.retrieveDocument(removedUrl);
 
-			//convert ALL urls in retriever to a queue of documents
-				/*NOTE: each url will have a corresponding document*/
-			docs = my_retriever.retrieveDocuments();
-
-//			my_parser.addDocuments(docs);
-//			my_analyzer.addDocuments(docs);
-			
-			//check the queue of documents that was retrieved
-			while (!docs.isEmpty()) {
-				
-				//remove from the document that is on top of the queue
-				page = docs.remove();
-
-				/*relativeURLs represent ALL clickable links that matches search keywords
+			/*relativeURLs represent ALL clickable links that matches search keywords
 						residing in a single web page (i.e. 'page')*/
-				//parse the document page, get all related links, save into variable relativeURLs
+			//parse the document page, get all related links and save into the variable 'relativeURLs'
+			if (page != null) {
 				relativeURLs = my_parser.parseDocument(page, my_words);
 
 				//analyze the page and compare search key words (i.e. 'my_words')
-					//analyzePage method will update the total hits of every keyword 
+					//NOTE: analyzePage method will update the total hits of every keyword 
 				my_analyzer.analyzePage(page, my_words);
 
-				//add all 
+				//add all the related urls from analyzer to urls-to-be-parsed
 				while (!relativeURLs.isEmpty()) 
 					urlsToParse.add(relativeURLs.remove());
 			}
 
+			//for loop iterates all urlsToBeParsed
 			for (String url : urlsToParse) {
 				prevSize = websitesCrawled.size();
 				websitesCrawled.add(url);
+				//check whether the website url has been crawled before
 				if (websitesCrawled.size() != prevSize) {
+					//only add urls to be parsed if they have not yet been visited
 					my_urls.add(url);
 				}
 			}
@@ -168,7 +155,7 @@ public class WebCrawler {
 //			my_analyzer.deleteContents();
 			System.err.println(websitesCrawled.size());
 		}
-		
+
 		System.err.println("ended loop");
 		System.out.println();
 		System.out.println("Word\t\t\tTotal Hits");
@@ -177,7 +164,18 @@ public class WebCrawler {
 		}
 //		System.err.println(my_words);
 	}
+	
+	public void clearContents() {
+		my_urls.clear();
+		my_words.clear();
 
+		my_retriever.deleteContents();
+		my_parser.deleteContents();
+		my_analyzer.deleteContents();
+
+		websitesCrawled.clear();
+	}
+	
 	public static void main(String[] args) {
 		String beginURL = "http://jsoup.org/";
 		Set<KeyWord> searchKeyWords = new HashSet<KeyWord>();
@@ -191,6 +189,13 @@ public class WebCrawler {
 		System.out.println("beginURL: " + crawler.getURLs());
 		crawler.start();
 		System.out.println(crawler.websitesCrawled);
+		System.out.println(crawler.websitesCrawled.size());
+		
+		System.out.println("searchKeys: " + crawler.getKeyWords());
+		System.out.println("beginURL: " + crawler.getURLs());
+		crawler.start();
+		System.out.println(crawler.websitesCrawled);
+		System.out.println(crawler.websitesCrawled.size());
 	}
 	
 }

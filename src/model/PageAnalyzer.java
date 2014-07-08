@@ -42,7 +42,7 @@ public class PageAnalyzer {
 		my_documents.addAll(doc);
 	}
 	public void analyzePage(Document webPage, Set<KeyWord> searchKeys) {
-		//TODO parse this page for search keys
+		//TODO implement this more efficiently
 //		Element head = webPage.head();
 //		Element body = webPage.body();
 		
@@ -64,6 +64,10 @@ public class PageAnalyzer {
 //		}
 		
 		System.out.println("analyzing webpage: " + webPage.location());
+		System.out.println("Word\t\tTotal Hits");
+		for (KeyWord word : searchKeys) {
+			System.out.println(word + "\t\t" + word.total());
+		}
 	}
 	public void deleteContents() {
 		my_documents.clear();

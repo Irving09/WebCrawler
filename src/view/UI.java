@@ -53,7 +53,7 @@ public class UI extends JFrame{
 	private DefaultListModel<KeyWord> my_key_left_model;
 	private DefaultListModel<KeyWord> my_key_right_model;
 	private DefaultListModel<Double> my_ave_hit_model;
-	private DefaultListModel<Double> my_total_hit_model;
+	private DefaultListModel<Integer> my_total_hit_model;
 	
 	private WebCrawler webCrawler;
 	private Set<KeyWord> searchKeys;
@@ -165,6 +165,7 @@ public class UI extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				webCrawler.clearContents();
 				webCrawler.setBeginURL(url_text.getText());
 				for (int i = 0; i < my_key_JList.getModel().getSize(); i++)
 					searchKeys.add(my_key_JList.getModel().getElementAt(i));
@@ -256,7 +257,7 @@ public class UI extends JFrame{
 		keyword_display.setBounds(26, 214, 110, 240);
 		panel_1.add(keyword_display);
 		
-		JList<Double> hitperpage_list = new JList<Double>();
+		JList<Integer> hitperpage_list = new JList<Integer>();
 		hitperpage_list.setBorder(new LineBorder(new Color(153, 50, 204), 2, true));
 		
 		
@@ -266,7 +267,7 @@ public class UI extends JFrame{
 		hitperpage_list.setBounds(141, 214, 110, 240);
 		panel_1.add(hitperpage_list);
 		
-		JList<Double> totalhits_display = new JList<Double>();
+		JList<Integer> totalhits_display = new JList<Integer>();
 		totalhits_display.setBorder(new LineBorder(new Color(153, 50, 204), 2, true));
 		
 		
