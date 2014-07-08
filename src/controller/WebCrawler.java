@@ -10,6 +10,7 @@ import java.util.Queue;
 import java.util.Set;
 
 import model.KeyWord;
+import model.PageAnalyzer;
 import model.PageParser;
 import model.PageRetriever;
 
@@ -46,6 +47,8 @@ public class WebCrawler {
 	 * An object responsible for parsing relative links within each URL, that matches any of the search keywords
 	 * */
 	private PageParser my_parser;
+
+	private PageAnalyzer my_analyzer;
 	
 	public WebCrawler() {
 		my_urls = new PriorityQueue<String>();
@@ -53,6 +56,7 @@ public class WebCrawler {
 		my_retriever = new PageRetriever();
 		my_parser = new PageParser();
 		websitesCrawled = new HashSet<String>();
+		my_analyzer = new PageAnalyzer();
 	}
 	
 	/**
@@ -70,6 +74,8 @@ public class WebCrawler {
 
 		my_retriever = new PageRetriever();
 		my_parser = new PageParser();
+		
+		my_analyzer = new PageAnalyzer();
 		
 		websitesCrawled = new HashSet<String>();
 		websitesCrawled.add(the_url);
@@ -100,44 +106,79 @@ public class WebCrawler {
 	 * System start up. Begins the algorithm for Webcrawler.
 	 */
 	public void start(){
+		System.err.println(my_words);
+		
 		//The removed url from the priority queue 'my_urls'.
 		String removedUrl;
 
 		//Queue of HTML documents that corresponds to each url in the queue 'my_urls'
 		Queue<Document> docs;
 		
-		boolean foundNewURL;
+		Queue<String> relativeURLs;
+		Queue<String> urlsToParse = new PriorityQueue<String>();
+		Document page;
+		
 		int prevSize;
 		
-		do {
-			foundNewURL = false;
-			while(!my_urls.isEmpty() && (websitesCrawled.size() < CRAWL_LIMIT)) {
-				removedUrl = my_urls.remove();
-				my_retriever.addURL(removedUrl);
+		//check the queue of URL strings, and crawl limit
+		while(!my_urls.isEmpty() && (websitesCrawled.size() < CRAWL_LIMIT)) {
+			
+			//remove the url that is at the top of the queue
+			removedUrl = my_urls.remove();
 
-				docs = my_retriever.retrieveDocuments();
-				my_parser.addDocument(docs);
+			//add this url to the page retriever
+			my_retriever.addURL(removedUrl);
 
-				for (String url : my_parser.parseAllDocuments(my_words)) {
-					prevSize = websitesCrawled.size();
-					websitesCrawled.add(url);
-					foundNewURL = (websitesCrawled.size() != prevSize); 
-					if (foundNewURL) {
-						my_urls.add(url);
-					}
-				}
-				my_parser.deleteContents();
-				System.err.println(websitesCrawled.size());
+			//convert ALL urls in retriever to a queue of documents
+				/*NOTE: each url will have a corresponding document*/
+			docs = my_retriever.retrieveDocuments();
+
+//			my_parser.addDocuments(docs);
+//			my_analyzer.addDocuments(docs);
+			
+			//check the queue of documents that was retrieved
+			while (!docs.isEmpty()) {
+				
+				//remove from the document that is on top of the queue
+				page = docs.remove();
+
+				/*relativeURLs represent ALL clickable links that matches search keywords
+						residing in a single web page (i.e. 'page')*/
+				//parse the document page, get all related links, save into variable relativeURLs
+				relativeURLs = my_parser.parseDocument(page, my_words);
+
+				//analyze the page and compare search key words (i.e. 'my_words')
+					//analyzePage method will update the total hits of every keyword 
+				my_analyzer.analyzePage(page, my_words);
+
+				//add all 
+				while (!relativeURLs.isEmpty()) 
+					urlsToParse.add(relativeURLs.remove());
 			}
-		} while (foundNewURL);
+
+			for (String url : urlsToParse) {
+				prevSize = websitesCrawled.size();
+				websitesCrawled.add(url);
+				if (websitesCrawled.size() != prevSize) {
+					my_urls.add(url);
+				}
+			}
+//			my_parser.deleteContents();
+			urlsToParse.clear();
+//			my_analyzer.deleteContents();
+			System.err.println(websitesCrawled.size());
+		}
+		
 		System.err.println("ended loop");
+		System.err.println(my_words);
 	}
-	
+
 	public static void main(String[] args) {
 		String beginURL = "http://jsoup.org/";
 		Set<KeyWord> searchKeyWords = new HashSet<KeyWord>();
 		searchKeyWords.add(new KeyWord("bugs"));
 		searchKeyWords.add(new KeyWord("Discussion"));
+		searchKeyWords.add(new KeyWord("Download"));
 		searchKeyWords.add(new KeyWord("Stack Overflow"));
 		
 		WebCrawler crawler = new WebCrawler(beginURL, searchKeyWords);

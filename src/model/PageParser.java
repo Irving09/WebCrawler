@@ -1,5 +1,6 @@
 package model;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -49,33 +50,31 @@ public class PageParser {
 	 * A method used to parse all documents for links that matches any of the search keywords.
 	 * Returns a queue of links that matches any of the search keywords. 
 	 * */
-	public Queue<String> parseAllDocuments(final Set<KeyWord> searchKeyWords) {
-		Queue<String> urlsToParse = new PriorityQueue<String>();
-		
-		Queue<String> relativeURLs;
-		while (!htmlDocs.isEmpty()) {
-			//relativeURLs represent ALL links within a single document
-			relativeURLs = parseDocument(htmlDocs.remove(), searchKeyWords);
-
-			while (!relativeURLs.isEmpty()) 
-				urlsToParse.add(relativeURLs.remove());
-		}
-		return urlsToParse;
-	}
+//	public Queue<String> parseAllDocuments(final Set<KeyWord> searchKeyWords) {
+//		Queue<String> urlsToParse = new PriorityQueue<String>();
+//		
+//		Queue<String> relativeURLs;
+//		while (!htmlDocs.isEmpty()) {
+//			//relativeURLs represent ALL links within a single document
+//			relativeURLs = parseDocument(htmlDocs.remove(), searchKeyWords);
+//
+//			while (!relativeURLs.isEmpty()) 
+//				urlsToParse.add(relativeURLs.remove());
+//		}
+//		return urlsToParse;
+//	}
 
 	/**
 	 * A helper method that parses a single document.
 	 * Note that each document will have its own links.
 	 * Returns a queue of urls. 
 	 * */
-	private Queue<String> parseDocument(final Document document, final Set<KeyWord> searchKeyWords) {
+	public Queue<String> parseDocument(final Document document, final Set<KeyWord> searchKeyWords) {
 		Queue<String> relativeURLs = new PriorityQueue<String>();
 
 		//Note: elements from an html page with attributes of href, (links to other pages)
 		Elements links = document.select("a[href]");
-		
-		Element test = document.body();
-		
+
 		System.out.println();
 		//Iterates all url links within the document
 		for (Element e : links) {
@@ -90,23 +89,23 @@ public class PageParser {
 					relativeURLs.add(e.attr("abs:href"));
 				}
 			}
-			
-			//remove next two lines once if statement is implemented
-//			relativeURLs.add(e.attr("abs:href"));
-//			System.out.println(e.text());System.out.println();
 		}
 		return relativeURLs;
 	}
-
+	
 	public void deleteContents() {
 		htmlDocs.clear();
+	}
+	
+	public Queue<Document> getHtmlDocs() {
+		return htmlDocs;
 	}
 	
 	/**
 	 * Add each document into the Queue of Documents to be parsed.
 	 * @param the_doc document of a page.
 	 */
-	public void addDocument(Queue<Document> the_doc) {
+	public void addDocuments(Queue<Document> the_doc) {
 		Iterator<Document> itr = the_doc.iterator();
 		
 		while(itr.hasNext()){
