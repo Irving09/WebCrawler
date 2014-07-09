@@ -50,7 +50,7 @@ public class WebCrawler {
 	 * An object responsible for analyzing the total hits of certain keyword in an html document
 	 * */
 	private PageAnalyzer my_analyzer;
-
+	
 	/**
 	 * A no argument constructor that initializes all the objects and data structures in the WebCrawler class
 	 * */
@@ -95,6 +95,8 @@ public class WebCrawler {
 		if (isValidURL(the_url)) {
 			my_urls.add(the_url);
 			websitesCrawled.add(the_url);
+		} else {
+			System.err.println("Not a valid URL!");
 		}
 	}
 
@@ -224,6 +226,21 @@ public class WebCrawler {
 		my_analyzer.deleteContents();
 
 		websitesCrawled.clear();
+	}
+	
+	public void removeKeyWord(KeyWord word) {
+		my_words.remove(word);
+	}
+	
+	public double getAvgWordPerPage() {
+		int totalHits = 0;
+		for (KeyWord word : my_words)
+			totalHits += word.totalHits();
+		return totalHits / websitesCrawled.size();
+	}
+	
+	public double getAvgURLsPerPage() {
+		return my_parser.totalURLSize() / websitesCrawled.size();
 	}
 	
 	public static void main(String[] args) {

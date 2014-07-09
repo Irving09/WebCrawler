@@ -29,12 +29,15 @@ public class PageParser {
 	 * A queue that holds html documents
 	 * */
 	private Queue<Document> htmlDocs; 
+	
+	private int totalURL_size;
 
 	/**
 	 * Initializes all private fields
 	 * */
 	public PageParser() {
 		htmlDocs = new PriorityQueue<Document>();
+		totalURL_size = 0;
 	}
 
 	/**
@@ -74,7 +77,7 @@ public class PageParser {
 
 		//Note: elements from an html page with attributes of href, (links to other pages)
 		Elements links = document.select("a[href]");
-
+		totalURL_size += links.size();
 		System.out.println();
 		//Iterates all url links within the document
 		for (Element e : links) {
@@ -91,6 +94,10 @@ public class PageParser {
 			}
 		}
 		return relativeURLs;
+	}
+	
+	public int totalURLSize() {
+		return totalURL_size;
 	}
 	
 	public void deleteContents() {
