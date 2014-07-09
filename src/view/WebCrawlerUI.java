@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.swing.DefaultListModel;
@@ -183,16 +184,17 @@ public class WebCrawlerUI extends JFrame{
 					pageRetrieved_text.setText(""+webCrawler.getWebSitesCrawled().size());
 					aveWord_text.setText("" + webCrawler.getAvgWordPerPage());
 					aveUrl_text.setText("" + webCrawler.getAvgURLsPerPage());
-					
+
 					//This is the Average parse time per page: 
 					double time = (webCrawler.totalNanoTime())/(webCrawler.getWebSitesCrawled().size());
 					aveParseTime_text.setText("" + time);
 					totalRunning_text.setText(""+ webCrawler.totalNanoTime() );
-					
-					//Display on JList: 
-					//my_total_hit_model.addElement("");
-				//	my_ave_hit_model.addElement(element);
 
+					//Display on JList: 
+					my_total_hit_model.addElement(webCrawler.getWordTotalHits(my_words));
+					double ave = (webCrawler.getWordTotalHits(my_words))/(webCrawler.getWebSitesCrawled().size());
+					my_ave_hit_model.addElement(ave);
+					//
 				}
 				else
 				{
@@ -242,7 +244,7 @@ public class WebCrawlerUI extends JFrame{
 		lblAverageParseTimepage.setBounds(26, 128, 153, 14);
 		panel_1.add(lblAverageParseTimepage);
 
-		JLabel lblTotalRunningTime = new JLabel("Total Running time (ms):");
+		JLabel lblTotalRunningTime = new JLabel("Total Running time (ns):");
 		lblTotalRunningTime.setBounds(26, 164, 153, 14);
 		panel_1.add(lblTotalRunningTime);
 
@@ -286,7 +288,7 @@ public class WebCrawlerUI extends JFrame{
 		panel_1.add(keyword_display);
 
 		///////////////////////// Hit per page JList:
-		
+
 		my_ave_hit_model = new DefaultListModel<Double>();
 		JList<Double> hitperpage_list = new JList<Double>(my_ave_hit_model);
 		hitperpage_list.setBorder(new LineBorder(new Color(153, 50, 204), 2, true));
