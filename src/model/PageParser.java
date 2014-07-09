@@ -84,7 +84,7 @@ public class PageParser {
 				//to any of the links in every page 'e'
 
 				//if (link matches key word)
-				if (e.text().toLowerCase().contains(word.string().toLowerCase())) {
+				if (e.text().toLowerCase().contains(word.toString().toLowerCase())) {
 					//e.attr("abs:href") gives the URL of the link in String
 					relativeURLs.add(e.attr("abs:href"));
 				}

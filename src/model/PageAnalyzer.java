@@ -47,9 +47,10 @@ public class PageAnalyzer {
 //		Element body = webPage.body();
 		
 		for (Element e : webPage.getAllElements()) {
+//			if (e.)
 			for (KeyWord word : searchKeys) {
-				if (e.ownText().toLowerCase().contains(word.string().toLowerCase())) {
-					word.addHit();
+				if (e.ownText().toLowerCase().contains(word.toString().toLowerCase())) {
+					word.incrementHits();
 				}
 			}
 		}
@@ -66,7 +67,7 @@ public class PageAnalyzer {
 		System.out.println("analyzing webpage: " + webPage.location());
 		System.out.println("Word\t\tTotal Hits");
 		for (KeyWord word : searchKeys) {
-			System.out.println(word + "\t\t" + word.total());
+			System.out.println(word + "\t\t" + word.totalHits());
 		}
 	}
 	public void deleteContents() {

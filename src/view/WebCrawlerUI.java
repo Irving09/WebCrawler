@@ -30,7 +30,7 @@ import controller.WebCrawler;
 import model.KeyWord;
 
 @SuppressWarnings("serial")
-public class UI extends JFrame{
+public class WebCrawlerUI extends JFrame{
 	
 	private JTextField keyword_text;
 	private JTextField url_text;
@@ -58,7 +58,7 @@ public class UI extends JFrame{
 	private WebCrawler webCrawler;
 	private Set<KeyWord> searchKeys;
 	
-	public UI() {
+	public WebCrawlerUI() {
 		super("Webcrawler");
 		webCrawler = new WebCrawler();
 		searchKeys = new HashSet<KeyWord>();
@@ -165,6 +165,7 @@ public class UI extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				//TODO clearContents not working
 				webCrawler.clearContents();
 				webCrawler.setBeginURL(url_text.getText());
 				for (int i = 0; i < my_key_JList.getModel().getSize(); i++)

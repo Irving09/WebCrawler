@@ -10,25 +10,31 @@ public class KeyWord {
 		keyword = the_word;
 		totalHits = the_totalHits;
 	}
-	public void addHit() {
+	public void incrementHits() {
 		totalHits++;
 	}
-	public String string() {
-		return keyword;
-	}
-	public int total() {
+	public int totalHits() {
 		return totalHits;
 	}
 	public String toString(){
 		return keyword;// + " : " + totalHits;
 	}
-	
+
+	/**
+	 * Compares whether two KeyWord objects are equivalent.
+	 * The equality of two KeyWord objects is NOT case sensitive.
+	 * Ex) This method would return TRUE with the following comparisons
+	 * 		Hello == HeLLO
+	 * 
+	 * @param the_other The other object to compare
+	 * @return Returns true if both KeyWord strings are equal both in lowercase
+	 * */
 	public boolean equals(final Object the_other) {
 		if (this == the_other) {
 			return true;
 		} else if ((the_other != null) &&
 				(the_other.getClass() == getClass())) {
-			return keyword.toLowerCase().equals(((KeyWord) the_other).string().toLowerCase());
+			return keyword.toLowerCase().equals(((KeyWord) the_other).toString().toLowerCase());
 		} else {
 			return false;
 		}

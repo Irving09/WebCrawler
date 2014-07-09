@@ -40,12 +40,18 @@ public class WebCrawler {
 	private PageRetriever my_retriever;
 
 	/**
-	 * An object responsible for parsing relative links within each URL, that matches any of the search keywords
+	 * An object responsible for parsing relative links that matches any of the search keywords for a web page
 	 * */
 	private PageParser my_parser;
 
+	/**
+	 * An object responsible for analyzing the total hits of certain keyword in an html document
+	 * */
 	private PageAnalyzer my_analyzer;
-	
+
+	/**
+	 * A no argument constructor that initializes all the objects and data structures in the WebCrawler class
+	 * */
 	public WebCrawler() {
 		my_urls = new PriorityQueue<String>();
 		my_words = new HashSet<KeyWord>();
@@ -54,7 +60,8 @@ public class WebCrawler {
 		websitesCrawled = new HashSet<String>();
 		my_analyzer = new PageAnalyzer();
 	}
-	
+
+	/*Not needed in the actual UI, but is used for testing*/
 	/**
 	 * Constructor set up. Initializes all fields.
 	 * 
@@ -76,20 +83,40 @@ public class WebCrawler {
 		websitesCrawled = new HashSet<String>();
 		websitesCrawled.add(the_url);
 	}
-	
+
+	/**
+	 * Assigns the initial url where the crawl starts.
+	 * 
+	 * @param the_url The initial url.
+	 * */
 	public void setBeginURL(final String the_url) {
 		my_urls.add(the_url);
 		websitesCrawled.add(the_url);
 	}
-	
+
+	/**
+	 * Sets the specified set of KeyWords for the WebCrawler to search for
+	 * 
+	 * @param the_words Set of KeyWord
+	 * */
 	public void setSearchKeyWords(final Set<KeyWord> the_words) {
 		my_words.addAll(the_words);
 	}
-	
+
+	/**
+	 * Gets all the urls to be parsed.
+	 * 
+	 *  @return A queue of urls, with each url as a String.
+	 * */
 	public Queue<String> getURLs() {
 		return my_urls;
 	}
-	
+
+	/**
+	 * Returns the set of keywords to search for during the crawl.
+	 * 
+	 * @return The set of keywords to search for.
+	 * */
 	public Set<KeyWord> getKeyWords() {
 		return my_words;
 	}
@@ -102,18 +129,21 @@ public class WebCrawler {
 	 * System start up. Begins the algorithm for Webcrawler.
 	 */
 	public void start(){
-		System.err.println(my_words);
-//		clearContents();
-		
+		System.err.println("Search Keys: \n\t" + my_words);
+
 		//The removed url from the priority queue 'my_urls'.
 		String removedUrl;
 
 		//HTML document that corresponds to the removedUrl
 		Document page;
-		
+
+		//relativeURLs represent ALL clickaable links within a page
 		Queue<String> relativeURLs;
+
+		//urlsToParse represent ALL clickable links that matches a search keyword
 		Queue<String> urlsToParse = new PriorityQueue<String>();
-		
+
+		//previous size of the websitesCrawled before crawling a website
 		int prevSize;
 		
 		//check the queue of URL strings, and crawl limit
@@ -150,9 +180,7 @@ public class WebCrawler {
 					my_urls.add(url);
 				}
 			}
-//			my_parser.deleteContents();
 			urlsToParse.clear();
-//			my_analyzer.deleteContents();
 			System.err.println(websitesCrawled.size());
 		}
 
@@ -160,15 +188,17 @@ public class WebCrawler {
 		System.out.println();
 		System.out.println("Word\t\t\tTotal Hits");
 		for (KeyWord w : my_words) {
-			System.out.println(w.string() + "\t\t\t" + w.total());
+			System.out.println(w.toString() + "\t\t\t" + w.totalHits());
 		}
 //		System.err.println(my_words);
 	}
 	
 	public void clearContents() {
 		my_urls.clear();
-		my_words.clear();
-
+		//TODO not working
+		for (KeyWord word : my_words)
+			word.clearHits();
+		
 		my_retriever.deleteContents();
 		my_parser.deleteContents();
 		my_analyzer.deleteContents();
@@ -184,13 +214,8 @@ public class WebCrawler {
 		searchKeyWords.add(new KeyWord("Download"));
 		searchKeyWords.add(new KeyWord("Stack Overflow"));
 		
+//		
 		WebCrawler crawler = new WebCrawler(beginURL, searchKeyWords);
-		System.out.println("searchKeys: " + crawler.getKeyWords());
-		System.out.println("beginURL: " + crawler.getURLs());
-		crawler.start();
-		System.out.println(crawler.websitesCrawled);
-		System.out.println(crawler.websitesCrawled.size());
-		
 		System.out.println("searchKeys: " + crawler.getKeyWords());
 		System.out.println("beginURL: " + crawler.getURLs());
 		crawler.start();
