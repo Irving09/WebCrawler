@@ -255,6 +255,10 @@ public class WebCrawler {
 		return totalNanoTime;
 	}
 	
+	public long avgParseNanoTime() {
+		return totalNanoTime / websitesCrawled.size();
+	}
+	
 	public static void main(String[] args) {
 		String beginURL = "http://jsoup.org/";
 		Set<KeyWord> searchKeyWords = new HashSet<KeyWord>();
@@ -268,6 +272,7 @@ public class WebCrawler {
 		System.out.println("searchKeys: " + crawler.getKeyWords());
 		System.out.println("beginURL: " + crawler.getURLs());
 		crawler.start();
+		System.out.println("avgHits/page: " + crawler.getAvgWordPerPage());
 		System.out.println(crawler.websitesCrawled);
 		System.out.println(crawler.websitesCrawled.size());
 	}
