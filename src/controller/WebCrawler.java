@@ -219,7 +219,7 @@ public class WebCrawler {
 		for (KeyWord w : my_words) {
 			System.out.println(w.toString() + "\t\t\t" + w.totalHits());
 		}
-		System.err.println("totalTime: " + totalTime());
+		//System.err.println("totalTime: " + totalTime());
 		System.err.println("totalNanoTime: " + totalNanoTime());
 	}
 	
