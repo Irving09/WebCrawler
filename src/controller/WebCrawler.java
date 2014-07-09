@@ -220,7 +220,8 @@ public class WebCrawler {
 		for (KeyWord w : my_words) {
 			System.out.println(w.toString() + "\t\t\t" + w.totalHits());
 		}
-//		System.err.println(my_words);
+		System.err.println("totalTime: " + totalTime());
+		System.err.println("totalNanoTime: " + totalNanoTime());
 	}
 	
 	public void clearContents() {
@@ -255,6 +256,10 @@ public class WebCrawler {
 		return totalNanoTime;
 	}
 	
+	public double totalTime() {
+		return (double) totalNanoTime / 1000000000.0;
+	}
+	
 	public long avgParseNanoTime() {
 		return totalNanoTime / websitesCrawled.size();
 	}
@@ -272,6 +277,8 @@ public class WebCrawler {
 		System.out.println("searchKeys: " + crawler.getKeyWords());
 		System.out.println("beginURL: " + crawler.getURLs());
 		crawler.start();
+		System.out.println("totalNanoTime: " + crawler.totalNanoTime());
+		System.out.println("totalTime: " + crawler.totalTime());
 		System.out.println("avgHits/page: " + crawler.getAvgWordPerPage());
 		System.out.println(crawler.websitesCrawled);
 		System.out.println(crawler.websitesCrawled.size());
