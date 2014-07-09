@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
@@ -264,6 +265,25 @@ public class WebCrawler {
 		return totalNanoTime / websitesCrawled.size();
 	}
 	
+	public int getWordTotalHits(final KeyWord word) {
+		Iterator<KeyWord> itr = my_words.iterator();
+		while (itr.hasNext()) {
+			KeyWord temp = itr.next();
+			if (temp.equals(word))
+				return temp.totalHits();
+		}
+		throw new IllegalArgumentException("Word " + word + " doesnt exist in the set of search keywords");
+	}
+	
+	public int getWordTotalHits(String word) {
+		Iterator<KeyWord> itr = my_words.iterator();
+		while (itr.hasNext()) {
+			KeyWord temp = itr.next();
+			if (temp.toString().toLowerCase().equals(word.toLowerCase()))
+				return temp.totalHits();
+		}
+		throw new IllegalArgumentException("Word " + word + " doesnt exist in the set of search keywords");
+	}
 	
 	public static void main(String[] args) {
 		String beginURL = "http://jsoup.org/";
@@ -283,6 +303,7 @@ public class WebCrawler {
 		System.out.println("avgHits/page: " + crawler.getAvgWordPerPage());
 		System.out.println(crawler.websitesCrawled);
 		System.out.println(crawler.websitesCrawled.size());
+		
 	}
 	
 }
