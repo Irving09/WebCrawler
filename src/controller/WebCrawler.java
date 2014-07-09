@@ -285,6 +285,10 @@ public class WebCrawler {
 		throw new IllegalArgumentException("Word " + word + " doesnt exist in the set of search keywords");
 	}
 	
+	public double getWordAvgHits(String word) {
+		return (double) getWordTotalHits(word) / (double) websitesCrawled.size();
+	}
+	
 	public static void main(String[] args) {
 		String beginURL = "http://jsoup.org/";
 		Set<KeyWord> searchKeyWords = new HashSet<KeyWord>();
@@ -303,7 +307,6 @@ public class WebCrawler {
 		System.out.println("avgHits/page: " + crawler.getAvgWordPerPage());
 		System.out.println(crawler.websitesCrawled);
 		System.out.println(crawler.websitesCrawled.size());
-		
 	}
 	
 }
