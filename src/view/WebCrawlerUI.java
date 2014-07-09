@@ -190,7 +190,7 @@ public class WebCrawlerUI extends JFrame{
 					totalRunning_text.setText(""+ webCrawler.totalNanoTime() );
 					
 					//Display on JList: 
-					//my_total_hit_model.addElement(webCrawler.);
+					//my_total_hit_model.addElement("");
 				//	my_ave_hit_model.addElement(element);
 
 				}
