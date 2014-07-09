@@ -1,5 +1,6 @@
 package controller;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -10,6 +11,7 @@ import model.PageAnalyzer;
 import model.PageParser;
 import model.PageRetriever;
 
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 public class WebCrawler {
@@ -90,8 +92,26 @@ public class WebCrawler {
 	 * @param the_url The initial url.
 	 * */
 	public void setBeginURL(final String the_url) {
-		my_urls.add(the_url);
-		websitesCrawled.add(the_url);
+		if (isValidURL(the_url)) {
+			my_urls.add(the_url);
+			websitesCrawled.add(the_url);
+		}
+	}
+
+	/**
+	 * Checks whether a url is valid or not.
+	 * 
+	 * @param the_url The initial url to begin the crawl
+	 * @return Returns true if the parameter is a valid url for Jsoup's connection request
+	 * */
+	public boolean isValidURL(final String the_url) {
+		try {
+			Jsoup.connect(the_url).get();
+			return true;
+		} catch (Exception e) {
+			//will catch the invalid url here if connect.get cannot make a connection
+			return false;
+		}
 	}
 
 	/**
