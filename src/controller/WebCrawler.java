@@ -1,6 +1,5 @@
 package controller;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -254,7 +253,15 @@ public class WebCrawler {
 	public long totalNanoTime() {
 		return totalNanoTime;
 	}
+
 	/*
+=======
+	
+	public long avgParseNanoTime() {
+		return totalNanoTime / websitesCrawled.size();
+	}
+	
+>>>>>>> 2706f9cb0ecadd2a4d9dd7e26ae18ed2e1863bc5
 	public static void main(String[] args) {
 		String beginURL = "http://jsoup.org/";
 		Set<KeyWord> searchKeyWords = new HashSet<KeyWord>();
@@ -268,6 +275,7 @@ public class WebCrawler {
 		System.out.println("searchKeys: " + crawler.getKeyWords());
 		System.out.println("beginURL: " + crawler.getURLs());
 		crawler.start();
+		System.out.println("avgHits/page: " + crawler.getAvgWordPerPage());
 		System.out.println(crawler.websitesCrawled);
 		System.out.println(crawler.websitesCrawled.size());
 	}*/
