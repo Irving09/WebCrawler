@@ -51,6 +51,8 @@ public class WebCrawler {
 	 * */
 	private PageAnalyzer my_analyzer;
 	
+	private long totalNanoTime;
+	
 	/**
 	 * A no argument constructor that initializes all the objects and data structures in the WebCrawler class
 	 * */
@@ -61,6 +63,7 @@ public class WebCrawler {
 		my_parser = new PageParser();
 		websitesCrawled = new HashSet<String>();
 		my_analyzer = new PageAnalyzer();
+		totalNanoTime = 0;
 	}
 
 	/*Not needed in the actual UI, but is used for testing*/
@@ -168,6 +171,8 @@ public class WebCrawler {
 		//previous size of the websitesCrawled before crawling a website
 		int prevSize;
 		
+		long start = System.nanoTime();
+		
 		//check the queue of URL strings, and crawl limit
 		while(!my_urls.isEmpty() && (websitesCrawled.size() < CRAWL_LIMIT)) {
 			
@@ -205,6 +210,9 @@ public class WebCrawler {
 			urlsToParse.clear();
 			System.err.println(websitesCrawled.size());
 		}
+		
+		long end = System.nanoTime();
+		totalNanoTime = end - start;
 
 		System.err.println("ended loop");
 		System.out.println();
@@ -241,6 +249,10 @@ public class WebCrawler {
 	
 	public double getAvgURLsPerPage() {
 		return my_parser.totalURLSize() / websitesCrawled.size();
+	}
+	
+	public long totalNanoTime() {
+		return totalNanoTime;
 	}
 	
 	public static void main(String[] args) {
