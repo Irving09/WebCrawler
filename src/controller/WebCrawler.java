@@ -210,7 +210,7 @@ public class WebCrawler {
 			System.err.println(websitesCrawled.size());
 		}
 		
-		long end = System.currentTimeMillis();
+		long end = System.nanoTime();
 		totalNanoTime = end - start;
 
 		System.err.println("ended loop");
@@ -255,8 +255,6 @@ public class WebCrawler {
 		return totalNanoTime;
 	}
 
-	/*
-=======
 	
 	public double totalTime() {
 		return (double) totalNanoTime / 1000000000.0;
@@ -266,7 +264,7 @@ public class WebCrawler {
 		return totalNanoTime / websitesCrawled.size();
 	}
 	
->>>>>>> 2706f9cb0ecadd2a4d9dd7e26ae18ed2e1863bc5
+	
 	public static void main(String[] args) {
 		String beginURL = "http://jsoup.org/";
 		Set<KeyWord> searchKeyWords = new HashSet<KeyWord>();
@@ -285,6 +283,6 @@ public class WebCrawler {
 		System.out.println("avgHits/page: " + crawler.getAvgWordPerPage());
 		System.out.println(crawler.websitesCrawled);
 		System.out.println(crawler.websitesCrawled.size());
-	}*/
+	}
 	
 }
