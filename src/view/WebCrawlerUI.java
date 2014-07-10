@@ -103,8 +103,12 @@ public class WebCrawlerUI extends JFrame{
 				if (my_key_left_model.size() < 10) {
 					my_words = keyword_text.getText(); //get the text from user input keyword.
 					final KeyWord search_key = new KeyWord(my_words);
-					my_key_left_model.addElement(search_key); //add this into the list to display.
+					int prevSize = webCrawler.getKeyWords().size();
 					webCrawler.addKeyWord(search_key);
+					if (webCrawler.getKeyWords().size() != prevSize) {
+						//add this into the list to display only if its not a duplicate
+						my_key_left_model.addElement(search_key); 
+					}
 					keyword_text.setText("");
 					System.out.println(webCrawler.getKeyWords());
 				}
@@ -166,9 +170,10 @@ public class WebCrawlerUI extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("------------------------------------");
 				//TODO clearContents not working
 				webCrawler.clearContents();
-
+				
 				//Make sure that the URL that user type in is valid: 
 				if (webCrawler.isValidURL(url_text.getText())) {
 
