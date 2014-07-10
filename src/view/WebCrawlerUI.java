@@ -224,6 +224,7 @@ public class WebCrawlerUI extends JFrame{
 				int index = my_key_JList.getSelectedIndex();
 				if (index > -1) {
 					webCrawler.removeKeyWord(my_key_left_model.remove(index));
+					System.out.println("searchKeys (after remove): " + webCrawler.getKeyWords());
 				}
 				System.out.println(webCrawler.getKeyWords());
 			}
