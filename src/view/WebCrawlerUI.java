@@ -29,6 +29,8 @@ import javax.swing.border.LineBorder;
 import model.KeyWord;
 import controller.WebCrawler;
 import javax.swing.AbstractListModel;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 @SuppressWarnings("serial")
 public class WebCrawlerUI extends JFrame{
@@ -137,6 +139,11 @@ public class WebCrawlerUI extends JFrame{
 		JPanel panel_3 = new JPanel();
 		panel_3.setBackground(new Color(255, 250, 240));
 		botPanel.add(panel_3);
+		
+		JComboBox threadComboBox = new JComboBox();
+		threadComboBox.setBackground(Color.WHITE);
+		threadComboBox.setModel(new DefaultComboBoxModel(new String[] {"Single Thread", "Multi Thread"}));
+		panel_3.add(threadComboBox);
 
 		JButton crawlButton = new JButton("Crawl");
 		crawlButton.setFont(new Font("Tahoma", Font.BOLD, 12));
