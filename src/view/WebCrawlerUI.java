@@ -8,7 +8,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import javax.swing.DefaultListModel;
@@ -28,7 +27,6 @@ import javax.swing.border.LineBorder;
 
 import model.KeyWord;
 import controller.WebCrawler;
-import javax.swing.AbstractListModel;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
@@ -54,11 +52,19 @@ public class WebCrawlerUI extends JFrame{
 	 * This is the List model for Keyword list which being displayed on the left side panel.
 	 */
 	private DefaultListModel<KeyWord> my_key_left_model;
-	//private DefaultListModel<KeyWord> my_key_right_model;
+	/**
+	 * Model for JList of Average Hit per Page JList.
+	 */
 	private DefaultListModel<Double> my_ave_hit_model;
+	/**
+	 * Model for JList of Total Hit Jlist .
+	 */
 	private DefaultListModel<Integer> my_total_hit_model;
 
 	private WebCrawler webCrawler;
+	/**
+	 * Set of all the Key words that user types in.
+	 */
 	private Set<KeyWord> searchKeys;
 
 	public WebCrawlerUI() {
@@ -139,12 +145,12 @@ public class WebCrawlerUI extends JFrame{
 		JPanel panel_3 = new JPanel();
 		panel_3.setBackground(new Color(255, 250, 240));
 		botPanel.add(panel_3);
-		
-		JComboBox threadComboBox = new JComboBox();
+		/************************************************************** Choosing Single Thread or Multi Thread ************/
+		JComboBox<String> threadComboBox = new JComboBox<String>();
 		threadComboBox.setBackground(Color.WHITE);
-		threadComboBox.setModel(new DefaultComboBoxModel(new String[] {"Single Thread", "Multi Thread"}));
+		threadComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Single Thread", "Multi Thread"}));
 		panel_3.add(threadComboBox);
-
+		/*********************************************************************** end Combo box *****************************/
 		JButton crawlButton = new JButton("Crawl");
 		crawlButton.setFont(new Font("Tahoma", Font.BOLD, 12));
 		panel_3.add(crawlButton);
@@ -346,11 +352,18 @@ public class WebCrawlerUI extends JFrame{
 		lblTotalHits.setBounds(282, 190, 77, 14);
 		panel_1.add(lblTotalHits);
 	}
+	/**
+	 * Initialize the Frame's dimension and visibility.
+	 */
 	public void init() {
 		this.setPreferredSize(new Dimension(800, 620));
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 	}
+	/**
+	 * Get text from text box URL user types in.
+	 * @return String of text.
+	 */
 	public String getURL() {
 		return url_text.getText();
 	}
