@@ -178,7 +178,6 @@ public class WebCrawlerUI extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("------------------------------------");
-				//TODO clearContents not working
 				webCrawler.clearContents();
 				
 				//Make sure that the URL that user type in is valid: 
@@ -189,7 +188,7 @@ public class WebCrawlerUI extends JFrame{
 					System.out.println("searchKeys: " + webCrawler.getKeyWords());
 					System.out.println("beginURL: " + webCrawler.getURLs());
 					webCrawler.startSingleThread();
-					System.out.println(webCrawler.getWebSitesCrawled());
+					System.out.println("Websites crawled\n" + webCrawler.getWebSitesCrawled());
 
 					//display into text boxes: 
 					pageRetrieved_text.setText(""+webCrawler.getWebSitesCrawled().size());
@@ -204,6 +203,8 @@ public class WebCrawlerUI extends JFrame{
 					//Display on JList: 
 					// by looping thru the key word list model, get the stat for each word and display in JList.
 					
+					my_total_hit_model.clear();
+					my_ave_hit_model.clear();
 					for (int i = 0; i < my_key_left_model.size(); i ++){
 						my_total_hit_model.addElement(webCrawler.getWordTotalHits(my_key_left_model.elementAt(i)));
 						double ave = (webCrawler.getWordTotalHits(my_key_left_model.elementAt(i)))/(webCrawler.getWebSitesCrawled().size());
