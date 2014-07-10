@@ -28,6 +28,7 @@ import javax.swing.border.LineBorder;
 
 import model.KeyWord;
 import controller.WebCrawler;
+import javax.swing.AbstractListModel;
 
 @SuppressWarnings("serial")
 public class WebCrawlerUI extends JFrame{
