@@ -204,10 +204,14 @@ public class WebCrawlerUI extends JFrame{
 					totalRunning_text.setText(""+ webCrawler.totalNanoTime() );
 
 					//Display on JList: 
-					my_total_hit_model.addElement(webCrawler.getWordTotalHits(my_words));
-					double ave = (webCrawler.getWordTotalHits(my_words))/(webCrawler.getWebSitesCrawled().size());
-					my_ave_hit_model.addElement(ave);
-					//
+					// by looping thru the key word list model, get the stat for each word and display in JList.
+					
+					for (int i = 0; i < my_key_left_model.size(); i ++){
+						my_total_hit_model.addElement(webCrawler.getWordTotalHits(my_key_left_model.elementAt(i)));
+						double ave = (webCrawler.getWordTotalHits(my_key_left_model.elementAt(i)))/(webCrawler.getWebSitesCrawled().size());
+						my_ave_hit_model.addElement(ave);
+					}
+
 				}
 				else
 				{
