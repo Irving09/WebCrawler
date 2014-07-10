@@ -60,17 +60,20 @@ public class WebCrawlerUI extends JFrame{
 	 * Model for JList of Total Hit Jlist .
 	 */
 	private DefaultListModel<Integer> my_total_hit_model;
-
+	
 	private WebCrawler webCrawler;
 	/**
 	 * Set of all the Key words that user types in.
 	 */
 	private Set<KeyWord> searchKeys;
+	
+	private boolean isMultiThread;
 
 	public WebCrawlerUI() {
 		super("Webcrawler");
 		webCrawler = new WebCrawler();
 		searchKeys = new HashSet<KeyWord>();
+		isMultiThread = false;
 
 		JPanel northPanel = new JPanel();
 		northPanel.setBackground(new Color(255, 250, 240));
@@ -193,7 +196,10 @@ public class WebCrawlerUI extends JFrame{
 					webCrawler.setSearchKeyWords(searchKeys);
 					System.out.println("searchKeys: " + webCrawler.getKeyWords());
 					System.out.println("beginURL: " + webCrawler.getURLs());
-					webCrawler.startSingleThread();
+					if (isMultiThread)
+						JOptionPane.showMessageDialog(null, "MultiThread functionality not yet implemented", "MultiThread alert", JOptionPane.ERROR_MESSAGE);
+					else
+						webCrawler.startSingleThread();
 					System.out.println("Websites crawled\n" + webCrawler.getWebSitesCrawled());
 
 					//display into text boxes: 

@@ -56,8 +56,6 @@ public class WebCrawler {
 	 * */
 	private long totalNanoTime;
 	
-	private boolean isMultiThreaded;
-	
 	/**
 	 * A no argument constructor that initializes all the objects and data structures in the WebCrawler class
 	 * */
@@ -69,7 +67,6 @@ public class WebCrawler {
 		websitesCrawled = new HashSet<String>();
 		my_analyzer = new PageAnalyzer();
 		totalNanoTime = 0;
-		isMultiThreaded = false;
 	}
 
 	/*Not needed in the actual UI, but is used for testing*/
@@ -93,8 +90,6 @@ public class WebCrawler {
 		
 		websitesCrawled = new HashSet<String>();
 		websitesCrawled.add(the_url);
-		
-		isMultiThreaded = false;
 	}
 
 	/**
