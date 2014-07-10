@@ -98,17 +98,17 @@ public class WebCrawlerUI extends JFrame{
 		//************************************************************************************ Add to list button**************//
 		btnAddToList.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
 				//maximum 10 keywords to be added to the JList.
 				if (my_key_left_model.size() < 10) {
 					my_words = keyword_text.getText(); //get the text from user input keyword.
 					final KeyWord search_key = new KeyWord(my_words);
 					my_key_left_model.addElement(search_key); //add this into the list to display.
+					webCrawler.addKeyWord(search_key);
 					keyword_text.setText("");
+					System.out.println(webCrawler.getKeyWords());
 				}
 				else
 					System.out.println("Can't add anymore keyword, maximum is 10 words.");
-
 			}
 		});
 		btnAddToList.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -177,7 +177,7 @@ public class WebCrawlerUI extends JFrame{
 					webCrawler.setSearchKeyWords(searchKeys);
 					System.out.println("searchKeys: " + webCrawler.getKeyWords());
 					System.out.println("beginURL: " + webCrawler.getURLs());
-					webCrawler.start();
+					webCrawler.startSingleThread();
 					System.out.println(webCrawler.getWebSitesCrawled());
 
 					//display into text boxes: 
@@ -209,9 +209,10 @@ public class WebCrawlerUI extends JFrame{
 		removeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int index = my_key_JList.getSelectedIndex();
-				if (index > -1) 
-					my_key_left_model.remove(index);
-
+				if (index > -1) {
+					webCrawler.removeKeyWord(my_key_left_model.remove(index));
+				}
+				System.out.println(webCrawler.getKeyWords());
 			}
 		});
 		removeButton.setFont(new Font("Tahoma", Font.BOLD, 12));

@@ -50,8 +50,13 @@ public class WebCrawler {
 	 * An object responsible for analyzing the total hits of certain keyword in an html document
 	 * */
 	private PageAnalyzer my_analyzer;
-	
+
+	/**
+	 * Total nano seconds the crawl algorithm takes to parse webpages.
+	 * */
 	private long totalNanoTime;
+	
+	private boolean isMultiThreaded;
 	
 	/**
 	 * A no argument constructor that initializes all the objects and data structures in the WebCrawler class
@@ -64,6 +69,7 @@ public class WebCrawler {
 		websitesCrawled = new HashSet<String>();
 		my_analyzer = new PageAnalyzer();
 		totalNanoTime = 0;
+		isMultiThreaded = false;
 	}
 
 	/*Not needed in the actual UI, but is used for testing*/
@@ -87,6 +93,8 @@ public class WebCrawler {
 		
 		websitesCrawled = new HashSet<String>();
 		websitesCrawled.add(the_url);
+		
+		isMultiThreaded = false;
 	}
 
 	/**
@@ -117,6 +125,10 @@ public class WebCrawler {
 			//will catch the invalid url here if connect.get cannot make a connection
 			return false;
 		}
+	}
+	
+	public void addKeyWord(final KeyWord new_word) {
+		my_words.add(new_word);
 	}
 
 	/**
@@ -153,7 +165,7 @@ public class WebCrawler {
 	/**
 	 * System start up. Begins the algorithm for Webcrawler.
 	 */
-	public void start(){
+	public void startSingleThread(){
 		System.err.println("Search Keys: \n\t" + my_words);
 
 		//The removed url from the priority queue 'my_urls'.
@@ -256,7 +268,6 @@ public class WebCrawler {
 		return totalNanoTime;
 	}
 
-	
 	public double totalTime() {
 		return (double) totalNanoTime / 1000000000.0;
 	}
@@ -301,11 +312,12 @@ public class WebCrawler {
 		WebCrawler crawler = new WebCrawler(beginURL, searchKeyWords);
 		System.out.println("searchKeys: " + crawler.getKeyWords());
 		System.out.println("beginURL: " + crawler.getURLs());
-		crawler.start();
+		crawler.startSingleThread();
 		System.out.println("totalNanoTime: " + crawler.totalNanoTime());
 		System.out.println("totalTime: " + crawler.totalTime());
 		System.out.println("avgHits/page: " + crawler.getAvgWordPerPage());
 		System.out.println(crawler.websitesCrawled);
+		System.out.println("total hits: (bugs) \t" + crawler.getWordTotalHits("bugs"));
 		System.out.println(crawler.websitesCrawled.size());
 	}
 	
