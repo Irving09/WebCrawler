@@ -191,8 +191,6 @@ public class WebCrawlerUI extends JFrame{
 				if (webCrawler.isValidURL(url_text.getText())) {
 
 					webCrawler.setBeginURL(url_text.getText());
-					for (int i = 0; i < my_key_JList.getModel().getSize(); i++)
-						searchKeys.add(my_key_JList.getModel().getElementAt(i));
 					webCrawler.setSearchKeyWords(searchKeys);
 					System.out.println("searchKeys: " + webCrawler.getKeyWords());
 					System.out.println("beginURL: " + webCrawler.getURLs());
@@ -234,6 +232,7 @@ public class WebCrawlerUI extends JFrame{
 				int index = my_key_JList.getSelectedIndex();
 				if (index > -1) {
 					webCrawler.removeKeyWord(my_key_left_model.remove(index));
+					System.out.println("searchKeys (after remove): " + webCrawler.getKeyWords());
 				}
 				System.out.println(webCrawler.getKeyWords());
 			}
