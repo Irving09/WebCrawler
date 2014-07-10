@@ -7,7 +7,7 @@ public class KeyWord {
 		this(the_word, 0);
 	}
 	public KeyWord(String the_word, int the_totalHits) {
-		keyword = the_word;
+		keyword = the_word.toLowerCase();
 		totalHits = the_totalHits;
 	}
 	public void incrementHits() {
@@ -38,6 +38,11 @@ public class KeyWord {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		return toString().hashCode();
 	}
 	
 	public final void clearHits() {
