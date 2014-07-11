@@ -208,9 +208,9 @@ public class WebCrawlerUI extends JFrame{
 					aveUrl_text.setText("" + webCrawler.getAvgURLsPerPage());
 
 					//This is the Average parse time per page: 
-					double time = (webCrawler.totalNanoTime())/(webCrawler.getWebSitesCrawled().size());
+					double time = (webCrawler.totalTime())/(webCrawler.getWebSitesCrawled().size());
 					aveParseTime_text.setText("" + time);
-					totalRunning_text.setText(""+ webCrawler.totalNanoTime() );
+					totalRunning_text.setText(""+ webCrawler.totalTime() );
 
 					//Display on JList: 
 					// by looping thru the key word list model, get the stat for each word and display in JList.
@@ -262,19 +262,19 @@ public class WebCrawlerUI extends JFrame{
 		lblPageRetrieved.setBounds(26, 42, 110, 14);
 		panel_1.add(lblPageRetrieved);
 
-		JLabel lblAveWordPer = new JLabel("Ave. word per page: ");
+		JLabel lblAveWordPer = new JLabel("Avg. word per page: ");
 		lblAveWordPer.setBounds(26, 67, 133, 14);
 		panel_1.add(lblAveWordPer);
 
-		JLabel lblNewLabel_1 = new JLabel("Ave. URLs per page: ");
+		JLabel lblNewLabel_1 = new JLabel("Avg. URLs per page: ");
 		lblNewLabel_1.setBounds(26, 100, 133, 14);
 		panel_1.add(lblNewLabel_1);
 
-		JLabel lblAverageParseTimepage = new JLabel("Average parse time/page:");
+		JLabel lblAverageParseTimepage = new JLabel("Avg. parse time per page:");
 		lblAverageParseTimepage.setBounds(26, 128, 153, 14);
 		panel_1.add(lblAverageParseTimepage);
 
-		JLabel lblTotalRunningTime = new JLabel("Total Running time (ns):");
+		JLabel lblTotalRunningTime = new JLabel("Total Running time (s):");
 		lblTotalRunningTime.setBounds(26, 164, 153, 14);
 		panel_1.add(lblTotalRunningTime);
 
