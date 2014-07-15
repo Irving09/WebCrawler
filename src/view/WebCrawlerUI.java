@@ -149,7 +149,7 @@ public class WebCrawlerUI extends JFrame{
 		panel_3.setBackground(new Color(255, 250, 240));
 		botPanel.add(panel_3);
 		/************************************************************** Choosing Single Thread or Multi Thread ************/
-		JComboBox<String> threadComboBox = new JComboBox<String>();
+		final JComboBox<String> threadComboBox = new JComboBox<String>();
 		threadComboBox.setBackground(Color.WHITE);
 		threadComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"Single Thread", "Multi Thread"}));
 		panel_3.add(threadComboBox);
@@ -188,18 +188,30 @@ public class WebCrawlerUI extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("------------------------------------");
 				webCrawler.clearContents();
-				
+
+				//if selected item at threadComboBox is "Single Thread"
+				if (threadComboBox.getItemAt(threadComboBox.getSelectedIndex()).equals("Single Thread"))
+					isMultiThread = false;
+					//run single  thread
+				else
+					isMultiThread = true;
+
+				System.out.println("isMultiThread: " + isMultiThread);
+
 				//Make sure that the URL that user type in is valid: 
 				if (webCrawler.isValidURL(url_text.getText())) {
 
+					//guaranteed the the url provided is valid
 					webCrawler.setBeginURL(url_text.getText());
+
 					webCrawler.setSearchKeyWords(searchKeys);
 					System.out.println("searchKeys: " + webCrawler.getKeyWords());
 					System.out.println("beginURL: " + webCrawler.getURLs());
-					if (isMultiThread)
+					if (isMultiThread) {
 						JOptionPane.showMessageDialog(null, "MultiThread functionality not yet implemented", "MultiThread alert", JOptionPane.ERROR_MESSAGE);
-					else
+					} else { 
 						webCrawler.startSingleThread();
+					}
 					System.out.println("Websites crawled\n" + webCrawler.getWebSitesCrawled());
 
 					//display into text boxes: 
@@ -222,13 +234,13 @@ public class WebCrawlerUI extends JFrame{
 						double ave = (webCrawler.getWordTotalHits(my_key_left_model.elementAt(i)))/(webCrawler.getWebSitesCrawled().size());
 						my_ave_hit_model.addElement(ave);
 					}
-
 				}
 				else
 				{
 					//throw a pop up warning if invalid url
 					JOptionPane.showMessageDialog(null, "Invalid URL, please retry.");
 				}
+				
 			}
 		});
 
@@ -337,8 +349,6 @@ public class WebCrawlerUI extends JFrame{
 		totalhits_display.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		totalhits_display.setBorder(new LineBorder(new Color(153, 50, 204), 2, true));
 
-
-
 		totalhits_display.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		totalhits_display.setBounds(256, 215, 110, 240);
 		panel_1.add(totalhits_display);
@@ -358,6 +368,7 @@ public class WebCrawlerUI extends JFrame{
 		lblTotalHits.setBounds(282, 190, 77, 14);
 		panel_1.add(lblTotalHits);
 	}
+
 	/**
 	 * Initialize the Frame's dimension and visibility.
 	 */
@@ -366,6 +377,7 @@ public class WebCrawlerUI extends JFrame{
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.setVisible(true);
 	}
+
 	/**
 	 * Get text from text box URL user types in.
 	 * @return String of text.

@@ -6,6 +6,8 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
+
 import model.KeyWord;
 import model.PageAnalyzer;
 import model.PageParser;
@@ -98,12 +100,12 @@ public class WebCrawler {
 	 * @param the_url The initial url.
 	 * */
 	public void setBeginURL(final String the_url) {
-		if (isValidURL(the_url)) {
+//		if (isValidURL(the_url)) {
 			my_urls.add(the_url);
 			websitesCrawled.add(the_url);
-		} else {
-			System.err.println("Not a valid URL!");
-		}
+//		} else {
+//			System.err.println("Not a valid URL!");
+//		}
 	}
 
 	/**
@@ -118,6 +120,7 @@ public class WebCrawler {
 			return true;
 		} catch (Exception e) {
 			//will catch the invalid url here if connect.get cannot make a connection
+			JOptionPane.showMessageDialog(null, "JSoup failed to connect to the url: " + the_url, "MultiThread alert", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 	}
@@ -161,8 +164,6 @@ public class WebCrawler {
 	 * System start up. Begins the algorithm for Webcrawler.
 	 */
 	public void startSingleThread(){
-		System.err.println("Search Keys: \n\t" + my_words);
-
 		//The removed url from the priority queue 'my_urls'.
 		String removedUrl;
 
