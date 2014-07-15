@@ -21,12 +21,12 @@ public class WebCrawler {
 	/**
 	 * Max number of algorithm loops to enforce the limit of # of web pages to crawl.
 	 * */
-	private static int CRAWL_LIMIT = 15;
+	private static int CRAWL_LIMIT = 20;
 
 	/**
 	 * A queue that keeps of all the URLs to crawl.
 	 * */
-	private final Queue<String> my_urls;
+	private final Queue<String> urlsToBeParsed;
 
 	/**
 	 * List of keywords to search for every crawl
@@ -62,7 +62,7 @@ public class WebCrawler {
 	 * A no argument constructor that initializes all the objects and data structures in the WebCrawler class
 	 * */
 	public WebCrawler() {
-		my_urls = new PriorityQueue<String>();
+		urlsToBeParsed = new PriorityQueue<String>();
 		my_words = new HashSet<KeyWord>();
 		my_retriever = new PageRetriever();
 		my_parser = new PageParser();
@@ -79,8 +79,8 @@ public class WebCrawler {
 	 * @param the_words : Keyword to search.
 	 */
 	public WebCrawler(final String the_url, final Set<KeyWord> the_words) {
-		my_urls = new PriorityQueue<String>();
-		my_urls.add(the_url);
+		urlsToBeParsed = new PriorityQueue<String>();
+		urlsToBeParsed.add(the_url);
 		
 		my_words = new HashSet<KeyWord>();
 		my_words.addAll(the_words);
@@ -100,12 +100,8 @@ public class WebCrawler {
 	 * @param the_url The initial url.
 	 * */
 	public void setBeginURL(final String the_url) {
-//		if (isValidURL(the_url)) {
-			my_urls.add(the_url);
-			websitesCrawled.add(the_url);
-//		} else {
-//			System.err.println("Not a valid URL!");
-//		}
+		urlsToBeParsed.add(the_url);
+		websitesCrawled.add(the_url);
 	}
 
 	/**
@@ -144,7 +140,7 @@ public class WebCrawler {
 	 *  @return A queue of urls, with each url as a String.
 	 * */
 	public Queue<String> getURLs() {
-		return my_urls;
+		return urlsToBeParsed;
 	}
 
 	/**
@@ -173,19 +169,16 @@ public class WebCrawler {
 		//relativeURLs represent ALL clickaable links within a page
 		Queue<String> relativeURLs;
 
-		//urlsToParse represent ALL clickable links that matches a search keyword
-		Queue<String> urlsToParse = new PriorityQueue<String>();
-
 		//previous size of the websitesCrawled before crawling a website
 		int prevSize;
 		
 		long start = System.nanoTime();
 		
 		//check the queue of URL strings, and crawl limit
-		while(!my_urls.isEmpty() && (websitesCrawled.size() < CRAWL_LIMIT)) {
+		while(!urlsToBeParsed.isEmpty() && (websitesCrawled.size() < CRAWL_LIMIT)) {
 			
 			//remove the url that is at the top of the queue
-			removedUrl = my_urls.remove();
+			removedUrl = urlsToBeParsed.remove();
 
 			//convert the url to a document (i.e. page)
 			page = my_retriever.retrieveDocument(removedUrl);
@@ -200,22 +193,23 @@ public class WebCrawler {
 					//NOTE: analyzePage method will update the total hits of every keyword 
 				my_analyzer.analyzePage(page, my_words);
 
-				//add all the related urls from analyzer to urls-to-be-parsed
-				while (!relativeURLs.isEmpty()) 
-					urlsToParse.add(relativeURLs.remove());
-			}
-
-			//for loop iterates all urlsToBeParsed
-			for (String url : urlsToParse) {
-				prevSize = websitesCrawled.size();
-				websitesCrawled.add(url);
-				//check whether the website url has been crawled before
-				if (websitesCrawled.size() != prevSize) {
-					//only add urls to be parsed if they have not yet been visited
-					my_urls.add(url);
+				String url;
+				
+				//iterates all urlsToBeParsed
+				while (!relativeURLs.isEmpty()) {
+					//get the url from top of the relativeURL queue
+					url = relativeURLs.remove();
+					prevSize = websitesCrawled.size();
+					websitesCrawled.add(url);
+					
+					//check whether the website url has been crawled before
+					if (websitesCrawled.size() != prevSize) {
+						//add all the related urls parsed by the parser to urls-to-be-parsed
+						urlsToBeParsed.add(url);
+					}
 				}
 			}
-			urlsToParse.clear();
+			
 			System.err.println(websitesCrawled.size());
 		}
 		
@@ -233,7 +227,7 @@ public class WebCrawler {
 	}
 	
 	public void clearContents() {
-		my_urls.clear();
+		urlsToBeParsed.clear();
 		//TODO not working
 		for (KeyWord word : my_words)
 			word.clearHits();

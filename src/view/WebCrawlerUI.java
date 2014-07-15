@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -68,6 +69,8 @@ public class WebCrawlerUI extends JFrame{
 	private Set<KeyWord> searchKeys;
 	
 	private boolean isMultiThread;
+	
+	private static final DecimalFormat df = new DecimalFormat("#.##");
 
 	public WebCrawlerUI() {
 		super("Webcrawler");
@@ -220,8 +223,8 @@ public class WebCrawlerUI extends JFrame{
 					aveUrl_text.setText("" + webCrawler.getAvgURLsPerPage());
 
 					//This is the Average parse time per page: 
-					double time = (webCrawler.totalTime())/(webCrawler.getWebSitesCrawled().size());
-					aveParseTime_text.setText("" + time);
+					double time = webCrawler.totalTime() / webCrawler.getWebSitesCrawled().size();
+					aveParseTime_text.setText("" + df.format(time));
 					totalRunning_text.setText(""+ webCrawler.totalTime() );
 
 					//Display on JList: 
