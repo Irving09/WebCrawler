@@ -21,7 +21,13 @@ public class WebCrawler {
 	/**
 	 * Max number of algorithm loops to enforce the limit of # of web pages to crawl.
 	 * */
-	private static int CRAWL_LIMIT = 20;
+	private static final int CRAWL_LIMIT = 20;
+	private static final int THREAD_NUM = 10;
+
+	/*For multi thread*/
+	private PageRetriever[] my_retrievers = new PageRetriever[THREAD_NUM];
+	private PageParser[] my_parsers = new PageParser[THREAD_NUM];
+	private PageAnalyzer[] my_analyzers = new PageAnalyzer[THREAD_NUM];
 
 	/**
 	 * A queue that keeps of all the URLs to crawl.
@@ -85,7 +91,7 @@ public class WebCrawler {
 		my_words = new HashSet<KeyWord>();
 		my_words.addAll(the_words);
 
-		my_retriever = new PageRetriever();
+		my_retriever = new PageRetriever(the_url);
 		my_parser = new PageParser();
 		
 		my_analyzer = new PageAnalyzer();
@@ -156,6 +162,18 @@ public class WebCrawler {
 		return websitesCrawled;
 	}
 	
+	public void startMultiThread() {
+		init();
+		String removedUrl;
+		
+	}
+	
+	private final void init() {
+		for (int i = 0; i < THREAD_NUM; i++) my_retrievers[i] = new PageRetriever();
+		for (int i = 0; i < THREAD_NUM; i++) my_parsers[i] = new PageParser();
+		for (int i = 0; i < THREAD_NUM; i++) my_analyzers[i] = new PageAnalyzer();
+	}
+	
 	/**
 	 * System start up. Begins the algorithm for Webcrawler.
 	 */
@@ -179,9 +197,9 @@ public class WebCrawler {
 			
 			//remove the url that is at the top of the queue
 			removedUrl = urlsToBeParsed.remove();
-
+			my_retriever.setURL(removedUrl);
 			//convert the url to a document (i.e. page)
-			page = my_retriever.retrieveDocument(removedUrl);
+			page = my_retriever.retrieveDocument();
 
 			/*relativeURLs represent ALL clickable links that matches search keywords
 						residing in a single web page (i.e. 'page')*/
@@ -225,14 +243,14 @@ public class WebCrawler {
 		//System.err.println("totalTime: " + totalTime());
 		System.err.println("totalNanoTime: " + totalNanoTime());
 	}
-	
+
+	/*Method NOT used*/
 	public void clearContents() {
 		urlsToBeParsed.clear();
-		//TODO not working
 		for (KeyWord word : my_words)
 			word.clearHits();
 		
-		my_retriever.deleteContents();
+//		my_retriever.deleteContents();
 		my_parser.deleteContents();
 		my_analyzer.deleteContents();
 

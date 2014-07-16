@@ -18,29 +18,21 @@ import org.jsoup.nodes.Document;
 	- as well as a repository in which to store the documents' contents.
 */
 
-public class PageRetriever {
+public class PageRetriever implements Runnable {
 	//http://jsoup.org/
 	public static final int PARSE_LIMIT = 15;
-
-	/*
-	 * URL queue not used
-	 * */
-	/**
-	 * The queue of urls for the webcrawler to crawl
-	 * */
-	private Queue<String> urlQueue;
+	private String my_url;
 	
 	public PageRetriever() {
-		urlQueue = new PriorityQueue<String>();
+		my_url = "NULL";
 	}
-
+	
 	/**
 	 * 
 	 * @param beginURL The initial URL to begin the crawl represented as a String.
 	 * */
 	public PageRetriever(String beginURL) {
-		urlQueue = new PriorityQueue<String>();
-		urlQueue.add(beginURL);
+		my_url = beginURL;
 	}
 	
 	/**
@@ -49,62 +41,22 @@ public class PageRetriever {
 	 * @param url THe page's url
 	 * @return The html document form of the website's url 
 	 * */
-	public Document retrieveDocument(String url) {
+	public Document retrieveDocument() {
 		try {
-			return Jsoup.connect(url).get();
+			return Jsoup.connect(my_url).get();
 		} catch(IOException e) {
-			System.out.println("Could not convert the provided url link to a document: " + url);
+			System.out.println("Could not convert the provided url link to a document: " + my_url);
 		}
 		return null;
 	}
 	
-
-	/*
-	 * METHOD NOT USED
-	 * */
-	/**
-	 * Retrieves all documents associated to the queue of URLs 'urlQueue'.
-	 * */
-	public Queue<Document> retrieveDocuments() {
-		System.err.println("urlQueue size: " + urlQueue.size());
-		Queue<Document> documents = new PriorityQueue<Document>();
-		String url;
-		while (!urlQueue.isEmpty()) {
-			url = urlQueue.remove();
-			try {
-				documents.add(Jsoup.connect(url).get());
-			} catch (IOException e) {
-				System.out.println("Could not convert the provided url link to a document: " + url);
-			}
-		}
-		return documents;
-	}
-
-	/**
-	 * Adds a single url to the queue.
-	 * */
-	public void addURL(String url) {
-		urlQueue.add(url);
+	public void setURL(final String the_url) {
+		my_url = the_url;
 	}
 	
-	public void deleteContents() {
-		urlQueue.clear();
-	}
-
-	/**
-	 * Adds a queue of urls to the queue
-	 * */
-	public void addURLqueue(Queue<String> urlsToParse) {
-		Iterator<String> itr = urlsToParse.iterator();
-		while (itr.hasNext())
-			urlQueue.add(itr.next());
-	}
-
-	/**
-	 * Accessor to the urlQueue
-	 * */
-	public Queue<String> getURLQueue() {
-		return urlQueue;
+	@Override
+	public void run() {
+		retrieveDocument();
 	}
 	
 }
