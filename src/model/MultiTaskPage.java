@@ -7,6 +7,8 @@ import java.util.Set;
 
 import org.jsoup.nodes.Document;
 
+import controller.WebCrawler;
+
 public class MultiTaskPage implements Runnable {
 	private PageRetriever myRetriever;
 	private PageParser myParser;
@@ -24,31 +26,53 @@ public class MultiTaskPage implements Runnable {
 		searchKeyWords = the_searchKeys;
 		websitesCrawled = the_websitesCrawled;
 	}
-	
+	public PageRetriever getRetriever() {
+		return myRetriever;
+	}
+	public PageParser getParser() {
+		return myParser;
+	}
+	public PageAnalyzer getAnalyzer() {
+		return myAnalyzer;
+	}
+	public Queue<String> getUrlsToBeParsed() {
+		return urlsToBeParsed;
+	}
+	public Set<KeyWord> getSearchKeyWords() {
+		return searchKeyWords;
+	}
+	public Set<String> getWebSitesCrawled() {
+		return websitesCrawled;
+	}
+
 	@Override
 	public void run() {
-		synchronized(this) {
-			myRetriever.setURL(urlsToBeParsed.remove());
-		}
-		
-		Document page = myRetriever.retrieveDocument();
-		int prevSize;
-		if (page != null) {
-			myAnalyzer.analyzePage(page, searchKeyWords);
-			Queue<String> relativeURLs = myParser.parseDocument(page, searchKeyWords);
-			String url;
-			//iterates all urlsToBeParsed
-			while (!relativeURLs.isEmpty()) {
-				//get the url from top of the relativeURL queue
-				url = relativeURLs.remove();
-				synchronized(this) { 
-					prevSize = websitesCrawled.size();
-					websitesCrawled.add(url);
+		while (!urlsToBeParsed.isEmpty() && (websitesCrawled.size() < WebCrawler.CRAWL_LIMIT)) {
+			synchronized(this) {
+				myRetriever.setURL(urlsToBeParsed.remove());
+			}
 
-					//check whether the website url has been crawled before
-					if (websitesCrawled.size() != prevSize) {
-						//add all the related urls parsed by the parser to urls-to-be-parsed
-						urlsToBeParsed.add(url);
+			Document page = myRetriever.retrieveDocument();
+			int prevSize;
+			if (page != null) {
+				synchronized(this) {
+					myAnalyzer.analyzePage(page, searchKeyWords);
+				}
+				Queue<String> relativeURLs = myParser.parseDocument(page, searchKeyWords);
+				String url;
+				//iterates all urlsToBeParsed
+				while (!relativeURLs.isEmpty()) {
+					//get the url from top of the relativeURL queue
+					url = relativeURLs.remove();
+					synchronized(this) { 
+						prevSize = websitesCrawled.size();
+						websitesCrawled.add(url);
+
+						//check whether the website url has been crawled before
+						if (websitesCrawled.size() != prevSize) {
+							//add all the related urls parsed by the parser to urls-to-be-parsed
+							urlsToBeParsed.add(url);
+						}
 					}
 				}
 			}

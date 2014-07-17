@@ -22,7 +22,7 @@ public class WebCrawler {
 	/**
 	 * Max number of algorithm loops to enforce the limit of # of web pages to crawl.
 	 * */
-	private static final int CRAWL_LIMIT = 20;
+	public static final int CRAWL_LIMIT = 20;
 	private static final int THREAD_NUM = 10;
 
 	/*For multi thread*/
