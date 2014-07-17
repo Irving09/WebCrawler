@@ -28,12 +28,11 @@ all the necessary information for the UI to produce the summary report.
 */
 
 public class PageAnalyzer {
+	/*queue NOT used*/
 	private Queue<Document> my_documents;
+
 	public PageAnalyzer() {
 		my_documents = new PriorityQueue<Document>();
-	}
-	public PageAnalyzer(Queue<Document> the_docs, Set<KeyWord> the_words) {
-		my_documents = the_docs;
 	}
 	//The average number of words per web page.
 	//The average number of embedded URLs per web page.
@@ -47,22 +46,12 @@ public class PageAnalyzer {
 //		Element body = webPage.body();
 		
 		for (Element e : webPage.getAllElements()) {
-//			if (e.)
 			for (KeyWord word : searchKeys) {
 				if (e.ownText().toLowerCase().contains(word.toString().toLowerCase())) {
 					word.incrementHits();
 				}
 			}
 		}
-		
-//		//head
-//		for (Element e : webPage.head().getAllElements()) {
-//			for (KeyWord word : searchKeys) {
-//				if (e.ownText().toLowerCase().contains(word.string().toLowerCase())) {
-//					word.addHit();
-//				}
-//			}
-//		}
 		
 		System.out.println("analyzing webpage: " + webPage.location());
 		System.out.println("Word\t\tTotal Hits");

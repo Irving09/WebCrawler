@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 
 import model.KeyWord;
+import model.MultiTaskPage;
 import model.PageAnalyzer;
 import model.PageParser;
 import model.PageRetriever;
@@ -25,9 +26,7 @@ public class WebCrawler {
 	private static final int THREAD_NUM = 10;
 
 	/*For multi thread*/
-	private PageRetriever[] my_retrievers = new PageRetriever[THREAD_NUM];
-	private PageParser[] my_parsers = new PageParser[THREAD_NUM];
-	private PageAnalyzer[] my_analyzers = new PageAnalyzer[THREAD_NUM];
+	private MultiTaskPage[] multiTaskPage = new MultiTaskPage[THREAD_NUM];
 
 	/**
 	 * A queue that keeps of all the URLs to crawl.
@@ -164,14 +163,19 @@ public class WebCrawler {
 	
 	public void startMultiThread() {
 		init();
-		String removedUrl;
-		
+		startThreads();
 	}
 	
 	private final void init() {
-		for (int i = 0; i < THREAD_NUM; i++) my_retrievers[i] = new PageRetriever();
-		for (int i = 0; i < THREAD_NUM; i++) my_parsers[i] = new PageParser();
-		for (int i = 0; i < THREAD_NUM; i++) my_analyzers[i] = new PageAnalyzer();
+		for (int threadNum = 0; threadNum < THREAD_NUM; threadNum++) {
+			multiTaskPage[threadNum] = new MultiTaskPage(urlsToBeParsed, my_words, websitesCrawled);
+		}
+	}
+	
+	private final void startThreads() {
+		for (int threadNum = 0; threadNum < THREAD_NUM; threadNum++) {
+			new Thread(multiTaskPage[threadNum]).start();
+		}
 	}
 	
 	/**

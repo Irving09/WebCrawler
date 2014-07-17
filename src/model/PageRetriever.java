@@ -56,7 +56,7 @@ public class PageRetriever implements Runnable {
 	
 	@Override
 	public void run() {
-		retrieveDocument();
+		
 	}
 	
 }
