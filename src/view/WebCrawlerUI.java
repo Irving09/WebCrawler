@@ -211,7 +211,8 @@ public class WebCrawlerUI extends JFrame{
 					System.out.println("searchKeys: " + webCrawler.getKeyWords());
 					System.out.println("beginURL: " + webCrawler.getURLs());
 					if (isMultiThread) {
-						JOptionPane.showMessageDialog(null, "MultiThread functionality not yet implemented", "MultiThread alert", JOptionPane.ERROR_MESSAGE);
+						webCrawler.startMultiThread();
+						//JOptionPane.showMessageDialog(null, "MultiThread functionality not yet implemented", "MultiThread alert", JOptionPane.ERROR_MESSAGE);
 					} else { 
 						webCrawler.startSingleThread();
 					}
